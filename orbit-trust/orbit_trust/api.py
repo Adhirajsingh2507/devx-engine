@@ -11,8 +11,10 @@ import os
 
 from fastapi import FastAPI
 
-from . import BUILD_ID, __version__, comms, economics, fleet, numerics, reentry
-from .models import CandidateSet, CommunicationScenario, EconomicScenario, ReentryScenario
+from . import BUILD_ID, __version__, assessment, comms, economics, fleet, numerics, reentry
+from .models import CandidateSet, CommunicationScenario, EconomicScenario, ReentryScenario, Report, parse_utc
+
+_DEMO_CLOCK = "2026-09-11T12:20:00Z"  # fixed demo clock (doc 02/22)
 
 app = FastAPI(title="ORBIT-TRUST API", version=__version__)
 
@@ -92,3 +94,11 @@ def reentry_evaluate(scenario: ReentryScenario) -> dict:
     """Exposure and optional conditional damage under a supplied footprint
     (doc 08). Not a predicted crash location; missing value stays unknown."""
     return reentry.evaluate(scenario.model_dump())
+
+
+@app.post("/api/v1/assess")
+def assess(report: Report, now: str = _DEMO_CLOCK) -> dict:
+    """Deterministic assessment for one report at the demo clock (docs 05/06):
+    recomputed Pc, evidence findings, evidence state, urgency. Compute-only;
+    persistence + case workflow arrive with the storage layer (N2)."""
+    return assessment.assess(report.model_dump(), now=parse_utc(now)).to_dict()

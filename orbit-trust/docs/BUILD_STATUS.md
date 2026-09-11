@@ -51,8 +51,8 @@ No larger deviations found; implementation tracks the handoff.
 | --- | --- | --- |
 | M0 deployment path | PARTIAL | Skeleton + reference oracle + FastAPI health/capabilities run. Rust wheel spike DONE (abi3-py312 manylinux_2_34 wheel built, imported, validated). Supabase + Groq spikes BLOCKED (creds). Vercel import-in-function verification pending a project. |
 | N1 Rust production core | DONE | orbit_core: projection + GL/periodic-trapezoid polar quadrature with two-grid convergence gate + Rayon batch. Matches Python oracle across T01-T10; wheel + build-manifest in vendor/wheels/. Benchmark (2000 problems): seq-Python 3400ms, seq-Rust 3310ms, parallel-Rust 483ms (6.8x), cached 83ms. |
-| M1 contracts/storage | PARTIAL | Strict Pydantic contract; domain validation + import classification; report ledger dedup/conflict/pair (T16-T18); canonical digest. supabase/migrations/0001_core.sql written (UNAPPLIED - no creds). RPCs/seed + live auth/isolation BLOCKED. |
-| M2 scientific core | PARTIAL | Python oracle passes T01-T06/T10; covariance validity + unsupported/precision states (T07-T09); deadline P0-P3 policy + ack floor (T12/T14). Rust production port DONE (orbit_core, validated vs oracle). T11/T13/T15 (assessment engine) pending. |
+| M1 contracts/storage | PARTIAL | Strict Pydantic contract; domain validation + import classification; report ledger dedup/conflict/pair (T16-T18); canonical digest. supabase/migrations 0001-0004 authored (UNAPPLIED - no creds): core+fleet/reentry tables, RLS, core RPCs, demo seed. Live auth/isolation + operation-lease RPC bodies BLOCKED. |
+| M2 scientific core | DONE (logic) | Rust core + Python oracle T01-T10; covariance/precision states (T07-T09); P0-P3 policy + ack floor (T12/T14); assessment engine (findings, evidence-state precedence, material-concern vs review, reopening) T11/T13/T15. Persisted assessment table lands with N2. |
 | M3 fleet/comms | PARTIAL | Fleet comparison engine (T25-T26 hero reversal) + communication timing/state machine (T28), both wired as compute-only API endpoints. Bounded chunks / DB leases / resumable batches / benchmark modes BLOCKED (no DB). |
 | M4 consequence/reentry | PARTIAL | Decimal expected-loss economics (T29-T30) + reentry exposure with holes/boundary + conditional damage (T31-T33), wired as compute-only endpoints. Reentry cannot alter orbital policy (separate module). |
 | M5 agent | NOT_STARTED | |
@@ -87,7 +87,10 @@ No larger deviations found; implementation tracks the handoff.
 | T33 (missing vulnerability) | PASS | exposure available, damage unavailable_missing_vulnerability |
 | positive import | PASS | all 10 fixture inputs accepted through Record union |
 | Rust core vs oracle (T01-T10) | PASS | orbit_core.project_and_pc matches orbit_trust.numerics + fixtures within 1e-6 rel; batch==sequential; error paths raise (.venv312) |
-| all others | NOT_RUN | later milestones |
+| T11 (uncertainty vs conflict) | PASS | sigma-200 reviews (risk, usable evidence); sigma-1000 monitors; sigma-1000 + missing obs still reviews without asserting high Pc |
+| T13 (cosmetic vs material) | PASS | DEADLINE_UNKNOWN (non-material) no review; MANEUVER_CONTEXT_UNKNOWN (material) reviews |
+| T15 (reopen closed) | PASS | new material evidence -> reviewing + ack required; duplicate/cosmetic -> unchanged |
+| all others | NOT_RUN | later milestones (credential-gated) |
 
 ## Next executable ticket
 Full forward plan with per-phase gates and acceptance: see `docs/NEXT_PHASE.md`.
