@@ -40,8 +40,8 @@ measured customer outcomes.
 | Milestone | Status | Notes |
 | --- | --- | --- |
 | M0 deployment path | PARTIAL | Skeleton + reference oracle + FastAPI health/capabilities run. Rust wheel + Supabase + Groq spikes BLOCKED (toolchain/creds). |
-| M1 contracts/storage | NOT_STARTED | Schema + fixtures copied into repo. |
-| M2 scientific core | PARTIAL | Independent Python oracle passes T01-T03/T02/T10; Rust production path + full policy pending. |
+| M1 contracts/storage | PARTIAL | Strict Pydantic models for whole contract; domain validation + import classification. Supabase tables/RLS/RPCs + dedup/conflict + auth BLOCKED (no creds). |
+| M2 scientific core | PARTIAL | Python oracle passes T01-T06/T10; covariance validity (T07); deadline P0-P3 policy + ack floor (T12/T14). Rust production port + T08/T09/T11/T13/T15 pending. |
 | M3 fleet/comms | NOT_STARTED | |
 | M4 consequence/reentry | NOT_STARTED | |
 | M5 agent | NOT_STARTED | |
@@ -54,14 +54,24 @@ measured customer outcomes.
 | T01 (isotropic reference Pc) | PASS | tests/reference/test_numerics.py vs encounter_reference sigma-20/50/200/1000 |
 | T02 (zero-miss analytic) | PASS | matches 1-exp(-R^2/2sigma^2) = 0.019801326693244702 |
 | T03 (anisotropic geometry+Pc) | PASS | projected mean [35,-12], cov [[900,180],[180,400]], Pc 0.027295519415793158 |
+| T04 (rotation invariance) | PASS | orthogonal rotation of all states -> Pc invariant |
+| T05 (primary/secondary swap) | PASS | same Pc |
+| T06 (translation invariance) | PASS | common shift -> relative result unchanged |
+| T07 (invalid covariance / schema) | PASS | negative-variance -> domain_invalid_covariance; missing-frame / pc>1 -> schema_422; same-object -> domain_pair_mismatch |
 | T10 (radius monotonic) | PASS | pc non-decreasing in R |
+| T12 (deadline tiers) | PASS | +40m/2h/unknown/exact/passed -> P1/P2/P1/P1/P0 |
+| T14 (ack floor holds) | PASS | downgrade after urgent held until latest-version ack |
+| positive import | PASS | all 10 fixture inputs accepted through Record union |
 | all others | NOT_RUN | later milestones |
 
 ## Next executable ticket
-M2 continuation (no creds needed): port projection + polar-quadrature to the Rust
-core once the toolchain is installed, add covariance-validity/frame checks
-(T04-T09) and the deadline P0-P3 policy (T11-T15). In parallel, M1 needs
-jsonschema + Pydantic models generated from `contracts/core.schema.json`.
+M2 (no creds): port projection + polar quadrature into the Rust `orbit_core` and
+validate against `orbit_trust.numerics` (T04-T09); add T08 (low-speed / endpoint /
+nonlinear -> unsupported), T09 (nonconvergence/underflow), T11 (sigma sensitivity),
+T13 (cosmetic vs material). M1 (no creds): write `supabase/migrations` SQL from
+doc 19 (tables/RLS/grants/RPCs) as artifacts; add report dedup + source-conflict
+logic (unit-testable against report_update_cases.json). DB execution, auth and
+two-account isolation stay BLOCKED until Supabase creds arrive.
 
 ## Credential gates blocking progress
 1. Rust toolchain (rustup + maturin) — local install, no owner needed.

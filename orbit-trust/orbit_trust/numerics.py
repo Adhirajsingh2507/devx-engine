@@ -23,6 +23,35 @@ from scipy.stats import ncx2
 # Numerical engineering defaults, not physical uncertainty estimates (doc 06).
 _ORTHOGONALITY_TOL = 1e-8
 _ISOTROPY_TOL = 1e-9
+_MIN_REL_SPEED = 1.0
+_MAX_COND = 1e6
+
+
+def covariance_status(cov3) -> tuple[bool, str | None]:
+    """Validate a 3x3 position covariance (doc 06). Returns (ok, reason).
+
+    Checks: finite entries, symmetry within 1e-10*max(1,||C||inf), positive
+    variances, correlations in [-1,1], positive-definite (Cholesky). Does not
+    silently repair; a nonpositive/singular matrix is unsupported, never zero."""
+    c = np.asarray(cov3, dtype=float)
+    if not np.all(np.isfinite(c)):
+        return False, "domain_invalid_covariance"  # nonfinite entries
+    tol = 1e-10 * max(1.0, float(np.max(np.abs(c))))
+    if np.max(np.abs(c - c.T)) > tol:
+        return False, "domain_invalid_covariance"  # material asymmetry
+    diag = np.diag(c)
+    if np.any(diag <= 0):
+        return False, "domain_invalid_covariance"  # nonpositive variance
+    for i in range(3):
+        for j in range(i + 1, 3):
+            rho = c[i, j] / math.sqrt(diag[i] * diag[j])
+            if rho < -1.0 - 1e-12 or rho > 1.0 + 1e-12:
+                return False, "domain_invalid_covariance"  # correlation out of range
+    try:
+        np.linalg.cholesky(c)
+    except np.linalg.LinAlgError:
+        return False, "unsupported_singular_covariance"  # PSD/singular unsupported
+    return True, None
 
 
 @dataclass(frozen=True)
