@@ -37,8 +37,8 @@ physics, physics below the engine, and the engine below the games — and where
 
 ```
 packages/   shared code, runs on client AND server
-  math/       ✅ Vec3 · Mat4 · Quaternion (+ 40 tests). Next: geometry + intersections
-  physics/    ⬜ rigid body → broadphase → narrowphase → solver
+  math/       ✅ Vec3 · Mat4 · Quaternion · Transform · geometry+intersections (61 tests)
+  physics/    🟡 RigidBody · World (gravity, Euler). Next: broadphase → narrowphase → solver
   engine/     ⬜ ECS · scene graph · events · serialization
   net/        ⬜ serialization · replication · prediction · reconciliation
 apps/
