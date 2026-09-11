@@ -11,7 +11,8 @@ import os
 
 from fastapi import FastAPI
 
-from . import BUILD_ID, __version__, numerics
+from . import BUILD_ID, __version__, comms, fleet, numerics
+from .models import CandidateSet, CommunicationScenario
 
 app = FastAPI(title="ORBIT-TRUST API", version=__version__)
 
@@ -44,3 +45,23 @@ def capabilities() -> dict:
         "generation_mode": "groq" if groq_enabled else "template_fallback",
         "smoke": numerics.smoke(),
     }
+
+
+# --- M3 compute-only endpoints ---------------------------------------------
+# Deterministic computation over an inline bundle. Workspace identity,
+# persistence, DB leases and resumable batching (doc 04) are added when Supabase
+# credentials exist; these are the pure cores those endpoints will wrap.
+
+
+@app.post("/api/v1/fleet/compare")
+def fleet_compare(candidate_set: CandidateSet) -> dict:
+    """Bounded comparison of supplied response candidates (doc 07). Input is
+    validated against the CandidateSet contract (422 on malformed input)."""
+    return fleet.compare(candidate_set.model_dump())
+
+
+@app.post("/api/v1/communications/simulate")
+def communications_simulate(scenario: CommunicationScenario) -> dict:
+    """Timing feasibility for a supplied communication scenario (doc 07).
+    Simulation only; no real transmission."""
+    return comms.timing_feasibility(scenario.model_dump())

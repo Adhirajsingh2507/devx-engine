@@ -42,7 +42,7 @@ measured customer outcomes.
 | M0 deployment path | PARTIAL | Skeleton + reference oracle + FastAPI health/capabilities run. Rust wheel + Supabase + Groq spikes BLOCKED (toolchain/creds). |
 | M1 contracts/storage | PARTIAL | Strict Pydantic contract; domain validation + import classification; report ledger dedup/conflict/pair (T16-T18); canonical digest. supabase/migrations/0001_core.sql written (UNAPPLIED - no creds). RPCs/seed + live auth/isolation BLOCKED. |
 | M2 scientific core | PARTIAL | Python oracle passes T01-T06/T10; covariance validity + unsupported/precision states (T07-T09); deadline P0-P3 policy + ack floor (T12/T14). Rust production port + T11/T13/T15 pending. |
-| M3 fleet/comms | NOT_STARTED | |
+| M3 fleet/comms | PARTIAL | Fleet comparison engine (T25-T26 hero reversal) + communication timing/state machine (T28), both wired as compute-only API endpoints. Bounded chunks / DB leases / resumable batches / benchmark modes BLOCKED (no DB). |
 | M4 consequence/reentry | NOT_STARTED | |
 | M5 agent | NOT_STARTED | |
 | M6 console | NOT_STARTED | |
@@ -66,17 +66,19 @@ measured customer outcomes.
 | T16 (dedup / out-of-order) | PASS | identical retry dedup; older revision preserves current |
 | T17 (source conflict) | PASS | same revision + different body -> retained conflict |
 | T18 (event-pair conflict) | PASS | reused event_key with different pair -> reject_association |
+| T25 (A-B fix creates A-C) | PASS | candidate-one blocked; every pair's pc/evidence visible |
+| T26 (candidate dispositions) | PASS | baseline+one blocked, two passes; preferred=candidate-two; pc matches fixture |
+| T28 (comms simulation) | PASS | scripted authorize/send/ack/execute; reject_send / expired / failed / reject_auth / timing_unknown |
 | positive import | PASS | all 10 fixture inputs accepted through Record union |
 | all others | NOT_RUN | later milestones |
 
 ## Next executable ticket
-M2 (no creds): port projection + polar quadrature into the Rust `orbit_core` and
-validate against `orbit_trust.numerics` (T04-T09); add T08 (low-speed / endpoint /
-nonlinear -> unsupported), T09 (nonconvergence/underflow), T11 (sigma sensitivity),
-T13 (cosmetic vs material). M1 (no creds): write `supabase/migrations` SQL from
-doc 19 (tables/RLS/grants/RPCs) as artifacts; add report dedup + source-conflict
-logic (unit-testable against report_update_cases.json). DB execution, auth and
-two-account isolation stay BLOCKED until Supabase creds arrive.
+M4 (no creds): consequence models + reentry sandbox — decimal expected-loss
+(T29-T30 vs economics.json: 100000/1000/99000/79000), regional polygon
+validation + point-in-polygon with holes/boundaries + dedup (T31-T32 vs
+reentry.json: represented pop 150, exposed value INR 1,500,000, conditional
+damage INR 150,000), optional conditional damage (T33). Then M2 Rust port once
+toolchain installed. DB/auth/Groq spikes remain BLOCKED.
 
 ## Credential gates blocking progress
 1. Rust toolchain (rustup + maturin) — local install, no owner needed.
