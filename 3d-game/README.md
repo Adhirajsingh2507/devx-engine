@@ -62,10 +62,14 @@ Full design notes and the long-form vision live in `docs/vision.md`.
 ## Run
 
 ```bash
-node --test --experimental-strip-types packages/*/test/*.test.ts   # or: pnpm test
+pnpm install     # once: links workspace packages + installs tsc / @types/node
+pnpm check       # typecheck + tests (CI gate)
+pnpm test        # tests only
+pnpm typecheck   # types only
 ```
 
-Node ≥ 22 runs the `.ts` sources directly via type-stripping — no build step
-needed for tests. `pnpm install` only when a package first takes a real
-dependency.
+Node ≥ 22 runs the `.ts` sources directly via type-stripping — **no build
+step**. Packages import each other's source (`@engine/math` → its `src`), and
+`tsc` runs as a pure checker (`noEmit`), never a compiler. When a package is
+eventually published to npm, add a build step then — not before.
 ```

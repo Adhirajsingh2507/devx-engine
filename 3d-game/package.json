@@ -6,7 +6,12 @@
   "type": "module",
   "scripts": {
     "test": "node --test --experimental-strip-types packages/*/test/*.test.ts",
-    "typecheck": "tsc --build"
+    "typecheck": "tsc",
+    "check": "pnpm typecheck && pnpm test"
   },
-  "packageManager": "pnpm@9.15.0"
+  "packageManager": "pnpm@9.15.0",
+  "devDependencies": {
+    "@types/node": "^22.20.2",
+    "typescript": "5"
+  }
 }
