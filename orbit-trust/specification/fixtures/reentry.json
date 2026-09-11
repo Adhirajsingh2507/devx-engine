@@ -1,0 +1,225 @@
+{
+  "fixture_version": "2.0",
+  "schema_definition": "ReentryScenario",
+  "input": {
+    "schema_version": "2.0",
+    "provenance_kind": "synthetic",
+    "source_name": "orbit-trust-original-fixture",
+    "source_revision": "fixture-2.0",
+    "bundle_kind": "reentry_scenario",
+    "scenario_id": "regional-exposure",
+    "window_start": "2026-09-12T00:00:00Z",
+    "window_end": "2026-09-12T01:00:00Z",
+    "footprint": {
+      "type": "Polygon",
+      "coordinates": [
+        [
+          [
+            0,
+            0
+          ],
+          [
+            2,
+            0
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            0,
+            2
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        [
+          [
+            0.75,
+            0.75
+          ],
+          [
+            0.75,
+            1.25
+          ],
+          [
+            1.25,
+            1.25
+          ],
+          [
+            1.25,
+            0.75
+          ],
+          [
+            0.75,
+            0.75
+          ]
+        ]
+      ]
+    },
+    "population_points": [
+      {
+        "sample_id": "pop-inside",
+        "coordinates": [
+          0.5,
+          0.5
+        ],
+        "represented_population": 100
+      },
+      {
+        "sample_id": "pop-hole",
+        "coordinates": [
+          1,
+          1
+        ],
+        "represented_population": 200
+      },
+      {
+        "sample_id": "pop-boundary",
+        "coordinates": [
+          2,
+          1
+        ],
+        "represented_population": 50
+      },
+      {
+        "sample_id": "pop-outside",
+        "coordinates": [
+          3,
+          3
+        ],
+        "represented_population": 500
+      }
+    ],
+    "asset_points": [
+      {
+        "asset_id": "asset-A",
+        "asset_type": "synthetic-building",
+        "coordinates": [
+          0.5,
+          0.5
+        ],
+        "replacement_value": {
+          "amount": "1000000",
+          "currency": "INR"
+        },
+        "probability_of_damage": 0.1,
+        "mean_loss_fraction": 0.5
+      },
+      {
+        "asset_id": "asset-B",
+        "asset_type": "synthetic-building",
+        "coordinates": [
+          1,
+          1
+        ],
+        "replacement_value": {
+          "amount": "2000000",
+          "currency": "INR"
+        },
+        "probability_of_damage": null,
+        "mean_loss_fraction": null
+      },
+      {
+        "asset_id": "asset-C",
+        "asset_type": "synthetic-utility",
+        "coordinates": [
+          2,
+          1
+        ],
+        "replacement_value": {
+          "amount": "500000",
+          "currency": "INR"
+        },
+        "probability_of_damage": 0.2,
+        "mean_loss_fraction": 1
+      },
+      {
+        "asset_id": "asset-D",
+        "asset_type": "synthetic-building",
+        "coordinates": [
+          3,
+          3
+        ],
+        "replacement_value": {
+          "amount": "100000",
+          "currency": "INR"
+        },
+        "probability_of_damage": null,
+        "mean_loss_fraction": null
+      }
+    ],
+    "coverage_note": "Fictional point inventory only; no census, impact or survival coverage is implied.",
+    "layer_revision": "fictional-layer-1"
+  },
+  "expected": {
+    "included_population_ids": [
+      "pop-inside",
+      "pop-boundary"
+    ],
+    "represented_population": 150,
+    "included_asset_ids": [
+      "asset-A",
+      "asset-C"
+    ],
+    "asset_count": 2,
+    "exposed_value_by_currency": {
+      "INR": "1500000"
+    },
+    "conditional_expected_damage_by_currency": {
+      "INR": "150000"
+    }
+  },
+  "alternative": {
+    "footprint": {
+      "type": "Polygon",
+      "coordinates": [
+        [
+          [
+            2.5,
+            2.5
+          ],
+          [
+            3.5,
+            2.5
+          ],
+          [
+            3.5,
+            3.5
+          ],
+          [
+            2.5,
+            3.5
+          ],
+          [
+            2.5,
+            2.5
+          ]
+        ]
+      ]
+    },
+    "expected": {
+      "included_population_ids": [
+        "pop-outside"
+      ],
+      "represented_population": 500,
+      "included_asset_ids": [
+        "asset-D"
+      ],
+      "asset_count": 1,
+      "exposed_value_by_currency": {
+        "INR": "100000"
+      },
+      "damage_status": "unavailable_missing_vulnerability"
+    }
+  },
+  "boundary_case": {
+    "coordinates": [
+      0.75,
+      1
+    ],
+    "expected_included": true
+  }
+}

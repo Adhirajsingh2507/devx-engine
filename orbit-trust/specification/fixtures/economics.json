@@ -1,0 +1,71 @@
+{
+  "fixture_version": "2.0",
+  "schema_definition": "EconomicScenario",
+  "input": {
+    "schema_version": "2.0",
+    "provenance_kind": "synthetic",
+    "source_name": "orbit-trust-original-fixture",
+    "source_revision": "fixture-2.0",
+    "bundle_kind": "economic_scenario",
+    "scenario_id": "INR-reference",
+    "case_event_key": "economic-reference-event",
+    "before_probability": 0.0001,
+    "after_probability": 1e-06,
+    "probability_basis": "synthetic_supplied",
+    "before_probability_ref": "econ-supplied-before",
+    "after_probability_ref": "econ-supplied-after",
+    "loss_items_before": [
+      {
+        "item_id": "replacement",
+        "description": "Fictional disjoint replacement loss",
+        "money": {
+          "amount": "1000000000",
+          "currency": "INR"
+        }
+      }
+    ],
+    "loss_items_after": [
+      {
+        "item_id": "replacement",
+        "description": "Same fictional conditional loss",
+        "money": {
+          "amount": "1000000000",
+          "currency": "INR"
+        }
+      }
+    ],
+    "response_cost": {
+      "amount": "20000",
+      "currency": "INR"
+    }
+  },
+  "expected": {
+    "currency": "INR",
+    "loss_before": "1000000000",
+    "loss_after": "1000000000",
+    "expected_loss_before": "100000",
+    "expected_loss_after": "1000",
+    "gross_reduction": "99000",
+    "net_benefit": "79000"
+  },
+  "negative_mutations": [
+    {
+      "id": "mixed-currency",
+      "json_pointer": "/response_cost/currency",
+      "replacement": "USD",
+      "expected_rejection": "domain_currency_mismatch"
+    },
+    {
+      "id": "unknown-probability",
+      "json_pointer": "/after_probability",
+      "replacement": null,
+      "expected_rejection": "domain_result_unavailable"
+    },
+    {
+      "id": "negative-net",
+      "json_pointer": "/response_cost/amount",
+      "replacement": "120000",
+      "expected_net_benefit": "-21000"
+    }
+  ]
+}

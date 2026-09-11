@@ -1,0 +1,1269 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:orbit-trust:canonical:2.0",
+  "title": "ORBIT-TRUST canonical input contract",
+  "description": "Domain checks in documents 05-08 remain mandatory. This is an input schema, not the complete generated OpenAPI or database schema.",
+  "oneOf": [
+    {
+      "$ref": "#/$defs/Report"
+    },
+    {
+      "$ref": "#/$defs/CandidateSet"
+    },
+    {
+      "$ref": "#/$defs/EconomicScenario"
+    },
+    {
+      "$ref": "#/$defs/ReentryScenario"
+    },
+    {
+      "$ref": "#/$defs/CommunicationScenario"
+    }
+  ],
+  "$defs": {
+    "ObjectState": {
+      "type": "object",
+      "properties": {
+        "object_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,119}$"
+        },
+        "position_m": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          },
+          "minItems": 3,
+          "maxItems": 3
+        },
+        "velocity_m_s": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          },
+          "minItems": 3,
+          "maxItems": 3
+        },
+        "position_covariance_m2": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "minItems": 3,
+            "maxItems": 3
+          },
+          "minItems": 3,
+          "maxItems": 3
+        },
+        "hard_body_radius_m": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        }
+      },
+      "required": [
+        "object_id",
+        "position_m",
+        "velocity_m_s",
+        "position_covariance_m2",
+        "hard_body_radius_m"
+      ],
+      "additionalProperties": false
+    },
+    "ModelDomain": {
+      "type": "object",
+      "properties": {
+        "linear_relative_motion": {
+          "const": true
+        },
+        "gaussian_position_error": {
+          "const": true
+        },
+        "constant_covariance": {
+          "const": true
+        },
+        "velocity_uncertainty_neglected": {
+          "const": true
+        },
+        "cross_object_dependence": {
+          "enum": [
+            "independent",
+            "supplied_cross_covariance"
+          ]
+        }
+      },
+      "required": [
+        "linear_relative_motion",
+        "gaussian_position_error",
+        "constant_covariance",
+        "velocity_uncertainty_neglected",
+        "cross_object_dependence"
+      ],
+      "additionalProperties": false
+    },
+    "Encounter": {
+      "type": "object",
+      "properties": {
+        "epoch": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "Z$"
+        },
+        "frame": {
+          "enum": [
+            "GCRF",
+            "synthetic_inertial"
+          ]
+        },
+        "interval_start_offset_s": {
+          "type": "number"
+        },
+        "interval_end_offset_s": {
+          "type": "number"
+        },
+        "primary": {
+          "$ref": "#/$defs/ObjectState"
+        },
+        "secondary": {
+          "$ref": "#/$defs/ObjectState"
+        },
+        "domain": {
+          "$ref": "#/$defs/ModelDomain"
+        },
+        "cross_covariance_ps_m2": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "minItems": 3,
+            "maxItems": 3
+          },
+          "minItems": 3,
+          "maxItems": 3
+        }
+      },
+      "required": [
+        "epoch",
+        "frame",
+        "interval_start_offset_s",
+        "interval_end_offset_s",
+        "primary",
+        "secondary",
+        "domain"
+      ],
+      "additionalProperties": false
+    },
+    "Planning": {
+      "type": "object",
+      "properties": {
+        "latest_command_at": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "date-time",
+              "pattern": "Z$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "review_allowance_s": {
+          "anyOf": [
+            {
+              "type": "number",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "maneuver_context_known": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "latest_command_at",
+        "review_allowance_s",
+        "maneuver_context_known"
+      ],
+      "additionalProperties": false
+    },
+    "EvidenceMetadata": {
+      "type": "object",
+      "properties": {
+        "primary_solution_epoch": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "date-time",
+              "pattern": "Z$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "secondary_solution_epoch": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "date-time",
+              "pattern": "Z$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "primary_last_observation_at": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "date-time",
+              "pattern": "Z$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "secondary_last_observation_at": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "date-time",
+              "pattern": "Z$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "covariance_realism_basis": {
+          "enum": [
+            "synthetic_assumption",
+            "operator_declared",
+            "unverified"
+          ]
+        },
+        "maneuver_information_status": {
+          "enum": [
+            "supplied_none",
+            "supplied_update",
+            "unknown"
+          ]
+        }
+      },
+      "required": [
+        "primary_solution_epoch",
+        "secondary_solution_epoch",
+        "primary_last_observation_at",
+        "secondary_last_observation_at",
+        "covariance_realism_basis",
+        "maneuver_information_status"
+      ],
+      "additionalProperties": false
+    },
+    "Report": {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "const": "2.0"
+        },
+        "provenance_kind": {
+          "enum": [
+            "synthetic",
+            "historical",
+            "operator_supplied"
+          ]
+        },
+        "source_name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 240
+        },
+        "source_revision": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 240
+        },
+        "bundle_kind": {
+          "const": "encounter_report"
+        },
+        "event_key": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,119}$"
+        },
+        "report_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,119}$"
+        },
+        "primary_object_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,119}$"
+        },
+        "secondary_object_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,119}$"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "Z$"
+        },
+        "reported_tca": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "Z$"
+        },
+        "reported_pc": {
+          "anyOf": [
+            {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "encounter": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Encounter"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "planning": {
+          "$ref": "#/$defs/Planning"
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 2000
+        },
+        "evidence_metadata": {
+          "$ref": "#/$defs/EvidenceMetadata"
+        }
+      },
+      "required": [
+        "schema_version",
+        "provenance_kind",
+        "source_name",
+        "source_revision",
+        "bundle_kind",
+        "event_key",
+        "report_id",
+        "primary_object_id",
+        "secondary_object_id",
+        "created_at",
+        "reported_tca",
+        "reported_pc",
+        "encounter",
+        "planning",
+        "evidence_metadata"
+      ],
+      "additionalProperties": false
+    },
+    "Money": {
+      "type": "object",
+      "properties": {
+        "amount": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]*)(\\.[0-9]+)?$",
+          "maxLength": 40
+        },
+        "currency": {
+          "type": "string",
+          "pattern": "^[A-Z]{3}$"
+        }
+      },
+      "required": [
+        "amount",
+        "currency"
+      ],
+      "additionalProperties": false
+    },
+    "Candidate": {
+      "type": "object",
+      "properties": {
+        "candidate_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,119}$"
+        },
+        "selected_object_state": {
+          "$ref": "#/$defs/ObjectState"
+        },
+        "delta_v_m_s": {
+          "anyOf": [
+            {
+              "type": "number",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "response_cost": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Money"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "feasible": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "feasibility_basis": {
+          "const": "supplied_assumption"
+        }
+      },
+      "required": [
+        "candidate_id",
+        "selected_object_state",
+        "delta_v_m_s",
+        "response_cost",
+        "feasible",
+        "feasibility_basis"
+      ],
+      "additionalProperties": false
+    },
+    "CandidateSet": {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "const": "2.0"
+        },
+        "provenance_kind": {
+          "enum": [
+            "synthetic",
+            "historical",
+            "operator_supplied"
+          ]
+        },
+        "source_name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 240
+        },
+        "source_revision": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 240
+        },
+        "bundle_kind": {
+          "const": "candidate_set"
+        },
+        "candidate_set_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,119}$"
+        },
+        "catalogue_revision": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 240
+        },
+        "epoch": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "Z$"
+        },
+        "frame": {
+          "enum": [
+            "GCRF",
+            "synthetic_inertial"
+          ]
+        },
+        "interval_start_offset_s": {
+          "type": "number"
+        },
+        "interval_end_offset_s": {
+          "type": "number"
+        },
+        "domain": {
+          "$ref": "#/$defs/ModelDomain"
+        },
+        "selected_object_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,119}$"
+        },
+        "objects": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ObjectState"
+          },
+          "minItems": 2,
+          "maxItems": 20
+        },
+        "alternatives": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Candidate"
+          },
+          "minItems": 1,
+          "maxItems": 3
+        },
+        "selected_object_maneuver_capable": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "planning": {
+          "$ref": "#/$defs/Planning"
+        },
+        "policy_threshold": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        }
+      },
+      "required": [
+        "schema_version",
+        "provenance_kind",
+        "source_name",
+        "source_revision",
+        "bundle_kind",
+        "candidate_set_id",
+        "catalogue_revision",
+        "epoch",
+        "frame",
+        "interval_start_offset_s",
+        "interval_end_offset_s",
+        "domain",
+        "selected_object_id",
+        "objects",
+        "alternatives",
+        "selected_object_maneuver_capable",
+        "planning",
+        "policy_threshold"
+      ],
+      "additionalProperties": false
+    },
+    "LossItem": {
+      "type": "object",
+      "properties": {
+        "item_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,119}$"
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 240
+        },
+        "money": {
+          "$ref": "#/$defs/Money"
+        }
+      },
+      "required": [
+        "item_id",
+        "description",
+        "money"
+      ],
+      "additionalProperties": false
+    },
+    "EconomicScenario": {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "const": "2.0"
+        },
+        "provenance_kind": {
+          "enum": [
+            "synthetic",
+            "historical",
+            "operator_supplied"
+          ]
+        },
+        "source_name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 240
+        },
+        "source_revision": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 240
+        },
+        "bundle_kind": {
+          "const": "economic_scenario"
+        },
+        "scenario_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,119}$"
+        },
+        "case_event_key": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,119}$"
+        },
+        "before_probability": {
+          "anyOf": [
+            {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "after_probability": {
+          "anyOf": [
+            {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "probability_basis": {
+          "enum": [
+            "synthetic_supplied",
+            "supported_calculation",
+            "reported_scenario"
+          ]
+        },
+        "before_probability_ref": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,119}$"
+        },
+        "after_probability_ref": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,119}$"
+        },
+        "loss_items_before": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/LossItem"
+          },
+          "minItems": 1,
+          "maxItems": 20
+        },
+        "loss_items_after": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/LossItem"
+          },
+          "minItems": 1,
+          "maxItems": 20
+        },
+        "response_cost": {
+          "$ref": "#/$defs/Money"
+        }
+      },
+      "required": [
+        "schema_version",
+        "provenance_kind",
+        "source_name",
+        "source_revision",
+        "bundle_kind",
+        "scenario_id",
+        "case_event_key",
+        "before_probability",
+        "after_probability",
+        "probability_basis",
+        "before_probability_ref",
+        "after_probability_ref",
+        "loss_items_before",
+        "loss_items_after",
+        "response_cost"
+      ],
+      "additionalProperties": false
+    },
+    "Geometry": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "Polygon"
+            },
+            "coordinates": {
+              "type": "array",
+              "items": {
+                "type": "array",
+                "items": {
+                  "type": "array",
+                  "items": {
+                    "type": "number",
+                    "minimum": -180,
+                    "maximum": 180
+                  },
+                  "minItems": 2,
+                  "maxItems": 2
+                },
+                "minItems": 4,
+                "maxItems": 1000
+              },
+              "minItems": 1,
+              "maxItems": 20
+            }
+          },
+          "required": [
+            "type",
+            "coordinates"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "MultiPolygon"
+            },
+            "coordinates": {
+              "type": "array",
+              "items": {
+                "type": "array",
+                "items": {
+                  "type": "array",
+                  "items": {
+                    "type": "array",
+                    "items": {
+                      "type": "number",
+                      "minimum": -180,
+                      "maximum": 180
+                    },
+                    "minItems": 2,
+                    "maxItems": 2
+                  },
+                  "minItems": 4,
+                  "maxItems": 1000
+                },
+                "minItems": 1,
+                "maxItems": 20
+              },
+              "minItems": 1,
+              "maxItems": 20
+            }
+          },
+          "required": [
+            "type",
+            "coordinates"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "PopulationPoint": {
+      "type": "object",
+      "properties": {
+        "sample_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,119}$"
+        },
+        "coordinates": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "minimum": -180,
+            "maximum": 180
+          },
+          "minItems": 2,
+          "maxItems": 2
+        },
+        "represented_population": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "sample_id",
+        "coordinates",
+        "represented_population"
+      ],
+      "additionalProperties": false
+    },
+    "AssetPoint": {
+      "type": "object",
+      "properties": {
+        "asset_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,119}$"
+        },
+        "asset_type": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 240
+        },
+        "coordinates": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "minimum": -180,
+            "maximum": 180
+          },
+          "minItems": 2,
+          "maxItems": 2
+        },
+        "replacement_value": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Money"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "probability_of_damage": {
+          "anyOf": [
+            {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "mean_loss_fraction": {
+          "anyOf": [
+            {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "asset_id",
+        "asset_type",
+        "coordinates",
+        "replacement_value",
+        "probability_of_damage",
+        "mean_loss_fraction"
+      ],
+      "additionalProperties": false
+    },
+    "ReentryScenario": {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "const": "2.0"
+        },
+        "provenance_kind": {
+          "enum": [
+            "synthetic",
+            "historical",
+            "operator_supplied"
+          ]
+        },
+        "source_name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 240
+        },
+        "source_revision": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 240
+        },
+        "bundle_kind": {
+          "const": "reentry_scenario"
+        },
+        "scenario_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,119}$"
+        },
+        "window_start": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "Z$"
+        },
+        "window_end": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "Z$"
+        },
+        "footprint": {
+          "$ref": "#/$defs/Geometry"
+        },
+        "population_points": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/PopulationPoint"
+          },
+          "minItems": 0,
+          "maxItems": 1000
+        },
+        "asset_points": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/AssetPoint"
+          },
+          "minItems": 0,
+          "maxItems": 1000
+        },
+        "coverage_note": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 240
+        },
+        "layer_revision": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 240
+        }
+      },
+      "required": [
+        "schema_version",
+        "provenance_kind",
+        "source_name",
+        "source_revision",
+        "bundle_kind",
+        "scenario_id",
+        "window_start",
+        "window_end",
+        "footprint",
+        "population_points",
+        "asset_points",
+        "coverage_note",
+        "layer_revision"
+      ],
+      "additionalProperties": false
+    },
+    "CommunicationScenario": {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "const": "2.0"
+        },
+        "provenance_kind": {
+          "enum": [
+            "synthetic",
+            "historical",
+            "operator_supplied"
+          ]
+        },
+        "source_name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 240
+        },
+        "source_revision": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 240
+        },
+        "bundle_kind": {
+          "const": "communication_scenario"
+        },
+        "scenario_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,119}$"
+        },
+        "candidate_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,119}$"
+        },
+        "comparison_ref": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,119}$"
+        },
+        "now": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "Z$"
+        },
+        "contact_start": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "date-time",
+              "pattern": "Z$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "contact_end": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "date-time",
+              "pattern": "Z$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "action_deadline": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "date-time",
+              "pattern": "Z$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "packet_expires_at": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "Z$"
+        },
+        "uplink_s": {
+          "anyOf": [
+            {
+              "type": "number",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "ack_allowance_s": {
+          "anyOf": [
+            {
+              "type": "number",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "action_lead_s": {
+          "anyOf": [
+            {
+              "type": "number",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "schema_version",
+        "provenance_kind",
+        "source_name",
+        "source_revision",
+        "bundle_kind",
+        "scenario_id",
+        "candidate_id",
+        "comparison_ref",
+        "now",
+        "contact_start",
+        "contact_end",
+        "action_deadline",
+        "packet_expires_at",
+        "uplink_s",
+        "ack_allowance_s",
+        "action_lead_s"
+      ],
+      "additionalProperties": false
+    },
+    "AgentSelection": {
+      "type": "object",
+      "properties": {
+        "assessment_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,119}$"
+        },
+        "ordered_finding_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,119}$"
+          },
+          "minItems": 0,
+          "maxItems": 50
+        },
+        "selected_fact_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,119}$"
+          },
+          "minItems": 0,
+          "maxItems": 50
+        },
+        "summary_template_code": {
+          "enum": [
+            "REVIEW_DUE_TO_RISK",
+            "REVIEW_DUE_TO_MISSING_EVIDENCE",
+            "REVIEW_DUE_TO_CONFLICT",
+            "MONITOR_SUPPORTED",
+            "CALCULATION_UNSUPPORTED"
+          ]
+        },
+        "request_template_code": {
+          "anyOf": [
+            {
+              "enum": [
+                "REQUEST_STATE_COVARIANCE",
+                "REQUEST_FRAME_EPOCH",
+                "REQUEST_MANEUVER_CONTEXT",
+                "REQUEST_DEADLINE"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "question_to_analyst_code": {
+          "anyOf": [
+            {
+              "enum": [
+                "CONFIRM_SOURCE",
+                "CONFIRM_DEADLINE",
+                "CONFIRM_ASSUMPTION"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "assessment_id",
+        "ordered_finding_ids",
+        "selected_fact_ids",
+        "summary_template_code",
+        "request_template_code",
+        "question_to_analyst_code"
+      ],
+      "additionalProperties": false
+    },
+    "Error": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 240
+        },
+        "message": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 240
+        },
+        "request_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,119}$"
+        },
+        "retryable": {
+          "type": "boolean"
+        },
+        "field_errors": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "path": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 240
+              },
+              "message": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 240
+              }
+            },
+            "required": [
+              "path",
+              "message"
+            ],
+            "additionalProperties": false
+          },
+          "minItems": 0,
+          "maxItems": 100
+        }
+      },
+      "required": [
+        "code",
+        "message",
+        "request_id",
+        "retryable",
+        "field_errors"
+      ],
+      "additionalProperties": false
+    },
+    "ImportBatch": {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "const": "2.0"
+        },
+        "expected_workspace_revision": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "records": {
+          "type": "array",
+          "items": {
+            "oneOf": [
+              {
+                "$ref": "#/$defs/Report"
+              },
+              {
+                "$ref": "#/$defs/CandidateSet"
+              },
+              {
+                "$ref": "#/$defs/EconomicScenario"
+              },
+              {
+                "$ref": "#/$defs/ReentryScenario"
+              },
+              {
+                "$ref": "#/$defs/CommunicationScenario"
+              }
+            ]
+          },
+          "minItems": 1,
+          "maxItems": 500
+        }
+      },
+      "required": [
+        "schema_version",
+        "expected_workspace_revision",
+        "records"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

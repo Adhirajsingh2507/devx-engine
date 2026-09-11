@@ -1,0 +1,326 @@
+{
+  "fixture_version": "2.0",
+  "schema_definition": "CandidateSet",
+  "input": {
+    "schema_version": "2.0",
+    "provenance_kind": "synthetic",
+    "source_name": "orbit-trust-original-fixture",
+    "source_revision": "fixture-2.0",
+    "bundle_kind": "candidate_set",
+    "candidate_set_id": "fleet-three-object",
+    "catalogue_revision": "catalogue-1",
+    "epoch": "2026-09-11T18:00:00Z",
+    "frame": "synthetic_inertial",
+    "interval_start_offset_s": -5,
+    "interval_end_offset_s": 5,
+    "domain": {
+      "linear_relative_motion": true,
+      "gaussian_position_error": true,
+      "constant_covariance": true,
+      "velocity_uncertainty_neglected": true,
+      "cross_object_dependence": "independent"
+    },
+    "selected_object_id": "A",
+    "objects": [
+      {
+        "object_id": "A",
+        "position_m": [
+          7000000,
+          0,
+          0
+        ],
+        "velocity_m_s": [
+          0,
+          7500,
+          0
+        ],
+        "position_covariance_m2": [
+          [
+            1250.0,
+            0,
+            0
+          ],
+          [
+            0,
+            1250.0,
+            0
+          ],
+          [
+            0,
+            0,
+            1250.0
+          ]
+        ],
+        "hard_body_radius_m": 5
+      },
+      {
+        "object_id": "B",
+        "position_m": [
+          7000100,
+          0,
+          0
+        ],
+        "velocity_m_s": [
+          0,
+          0,
+          7500
+        ],
+        "position_covariance_m2": [
+          [
+            1250.0,
+            0,
+            0
+          ],
+          [
+            0,
+            1250.0,
+            0
+          ],
+          [
+            0,
+            0,
+            1250.0
+          ]
+        ],
+        "hard_body_radius_m": 5
+      },
+      {
+        "object_id": "C",
+        "position_m": [
+          7000400,
+          0,
+          0
+        ],
+        "velocity_m_s": [
+          0,
+          -7500,
+          0
+        ],
+        "position_covariance_m2": [
+          [
+            1250.0,
+            0,
+            0
+          ],
+          [
+            0,
+            1250.0,
+            0
+          ],
+          [
+            0,
+            0,
+            1250.0
+          ]
+        ],
+        "hard_body_radius_m": 5
+      }
+    ],
+    "alternatives": [
+      {
+        "candidate_id": "candidate-one",
+        "selected_object_state": {
+          "object_id": "A",
+          "position_m": [
+            7000400,
+            0,
+            0
+          ],
+          "velocity_m_s": [
+            0,
+            7500,
+            0
+          ],
+          "position_covariance_m2": [
+            [
+              1250.0,
+              0,
+              0
+            ],
+            [
+              0,
+              1250.0,
+              0
+            ],
+            [
+              0,
+              0,
+              1250.0
+            ]
+          ],
+          "hard_body_radius_m": 5
+        },
+        "delta_v_m_s": 0.1,
+        "response_cost": {
+          "amount": "20000",
+          "currency": "INR"
+        },
+        "feasible": true,
+        "feasibility_basis": "supplied_assumption"
+      },
+      {
+        "candidate_id": "candidate-two",
+        "selected_object_state": {
+          "object_id": "A",
+          "position_m": [
+            6999800,
+            0,
+            0
+          ],
+          "velocity_m_s": [
+            0,
+            7500,
+            0
+          ],
+          "position_covariance_m2": [
+            [
+              1250.0,
+              0,
+              0
+            ],
+            [
+              0,
+              1250.0,
+              0
+            ],
+            [
+              0,
+              0,
+              1250.0
+            ]
+          ],
+          "hard_body_radius_m": 5
+        },
+        "delta_v_m_s": 0.2,
+        "response_cost": {
+          "amount": "30000",
+          "currency": "INR"
+        },
+        "feasible": true,
+        "feasibility_basis": "supplied_assumption"
+      }
+    ],
+    "selected_object_maneuver_capable": true,
+    "planning": {
+      "latest_command_at": "2026-09-11T14:30:00Z",
+      "review_allowance_s": 5400,
+      "maneuver_context_known": true
+    },
+    "policy_threshold": 0.0001
+  },
+  "expected": {
+    "candidate_results": [
+      {
+        "candidate_id": "baseline",
+        "pairs": [
+          {
+            "pair": [
+              "A",
+              "B"
+            ],
+            "tca_offset_s": 0,
+            "miss_distance_m": 100,
+            "pc": 0.002733592576274522,
+            "threshold_exceeded": true
+          },
+          {
+            "pair": [
+              "A",
+              "C"
+            ],
+            "tca_offset_s": 0,
+            "miss_distance_m": 400,
+            "pc": 3.397306768492197e-16,
+            "threshold_exceeded": false
+          },
+          {
+            "pair": [
+              "B",
+              "C"
+            ],
+            "tca_offset_s": 0,
+            "miss_distance_m": 300,
+            "pc": 3.590157617640438e-10,
+            "threshold_exceeded": false
+          }
+        ],
+        "disposition": "blocked_by_demo_policy"
+      },
+      {
+        "candidate_id": "candidate-one",
+        "pairs": [
+          {
+            "pair": [
+              "A",
+              "B"
+            ],
+            "tca_offset_s": 0,
+            "miss_distance_m": 300,
+            "pc": 3.590157617640438e-10,
+            "threshold_exceeded": false
+          },
+          {
+            "pair": [
+              "A",
+              "C"
+            ],
+            "tca_offset_s": 0,
+            "miss_distance_m": 0,
+            "pc": 0.019801326693244702,
+            "threshold_exceeded": true
+          },
+          {
+            "pair": [
+              "B",
+              "C"
+            ],
+            "tca_offset_s": 0,
+            "miss_distance_m": 300,
+            "pc": 3.590157617640438e-10,
+            "threshold_exceeded": false
+          }
+        ],
+        "disposition": "blocked_by_demo_policy"
+      },
+      {
+        "candidate_id": "candidate-two",
+        "pairs": [
+          {
+            "pair": [
+              "A",
+              "B"
+            ],
+            "tca_offset_s": 0,
+            "miss_distance_m": 300,
+            "pc": 3.590157617640438e-10,
+            "threshold_exceeded": false
+          },
+          {
+            "pair": [
+              "A",
+              "C"
+            ],
+            "tca_offset_s": 0,
+            "miss_distance_m": 600,
+            "pc": 2.036631584677569e-33,
+            "threshold_exceeded": false
+          },
+          {
+            "pair": [
+              "B",
+              "C"
+            ],
+            "tca_offset_s": 0,
+            "miss_distance_m": 300,
+            "pc": 3.590157617640438e-10,
+            "threshold_exceeded": false
+          }
+        ],
+        "disposition": "passes_demo_checks"
+      }
+    ],
+    "preferred_among_passing_alternatives": "candidate-two",
+    "coverage_label": "All 3 supplied objects assessed over this 10-second synthetic encounter segment."
+  },
+  "reference_method": "SciPy ncx2.cdf for each isotropic encounter; relative position orthogonal to all relative velocities at common epoch"
+}

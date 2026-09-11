@@ -1,0 +1,74 @@
+{
+  "fixture_version": "2.0",
+  "schema_definition": "CommunicationScenario",
+  "input": {
+    "schema_version": "2.0",
+    "provenance_kind": "synthetic",
+    "source_name": "orbit-trust-original-fixture",
+    "source_revision": "fixture-2.0",
+    "bundle_kind": "communication_scenario",
+    "scenario_id": "comm-contact-1",
+    "candidate_id": "candidate-two",
+    "comparison_ref": "comparison-three-object-1",
+    "now": "2026-09-11T14:02:00Z",
+    "contact_start": "2026-09-11T14:00:00Z",
+    "contact_end": "2026-09-11T14:15:00Z",
+    "action_deadline": "2026-09-11T14:30:00Z",
+    "packet_expires_at": "2026-09-11T14:20:00Z",
+    "uplink_s": 5,
+    "ack_allowance_s": 20,
+    "action_lead_s": 300
+  },
+  "expected": {
+    "timing_status": "fits_supplied_window",
+    "modeled_completion": "2026-09-11T14:07:25Z",
+    "real_transmission_performed": false
+  },
+  "scripted_events": [
+    {
+      "event": "authorize",
+      "at": "2026-09-11T14:02:00Z",
+      "expected_state": "authorized_for_simulation"
+    },
+    {
+      "event": "send",
+      "at": "2026-09-11T14:02:00Z",
+      "expected_state": "sent"
+    },
+    {
+      "event": "acknowledge",
+      "at": "2026-09-11T14:02:25Z",
+      "expected_state": "acknowledged"
+    },
+    {
+      "event": "report_execution",
+      "at": "2026-09-11T14:07:25Z",
+      "expected_state": "execution_reported"
+    }
+  ],
+  "negative_cases": [
+    {
+      "id": "outside-contact",
+      "send_at": "2026-09-11T14:16:00Z",
+      "expected": "reject_send"
+    },
+    {
+      "id": "expired-packet",
+      "send_at": "2026-09-11T14:20:00Z",
+      "expected": "expired"
+    },
+    {
+      "id": "no-ack",
+      "expected": "sent_until_timeout_then_failed"
+    },
+    {
+      "id": "stale-comparison",
+      "expected": "reject_authorization"
+    },
+    {
+      "id": "unknown-contact",
+      "contact_start": null,
+      "expected": "timing_unknown"
+    }
+  ]
+}

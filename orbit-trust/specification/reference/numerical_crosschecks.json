@@ -1,0 +1,58 @@
+{
+  "purpose": "Reference mathematics checked while preparing specification; not ORBIT-TRUST application test results.",
+  "isotropic": [
+    {
+      "sigma_m": 20.0,
+      "pc_ncx2": 8.712740185868593e-07,
+      "pc_previous_polar": 8.71274018586874e-07,
+      "absolute_error": 1.4717197458543468e-20,
+      "tolerance": 1e-12
+    },
+    {
+      "sigma_m": 50.0,
+      "pc_ncx2": 0.002733592576274522,
+      "pc_previous_polar": 0.002733592576274527,
+      "absolute_error": 5.204170427930421e-18,
+      "tolerance": 2.7335925762745217e-10
+    },
+    {
+      "sigma_m": 200.0,
+      "pc_ncx2": 0.0011025180765032241,
+      "pc_previous_polar": 0.0011025180765032241,
+      "absolute_error": 0.0,
+      "tolerance": 1.1025180765032242e-10
+    },
+    {
+      "sigma_m": 1000.0,
+      "pc_ncx2": 4.974938643338525e-05,
+      "pc_previous_polar": 4.9749386433385265e-05,
+      "absolute_error": 1.3552527156068805e-20,
+      "tolerance": 4.974938643338525e-12
+    }
+  ],
+  "anisotropic": {
+    "mean_m": [
+      35.0,
+      -12.0
+    ],
+    "covariance_m2": [
+      [
+        900.0,
+        180.0
+      ],
+      [
+        180.0,
+        400.0
+      ]
+    ],
+    "radius_m": 10,
+    "pc_cartesian_adaptive": 0.027295519415793158,
+    "reported_quadrature_error": 7.667477763817487e-16,
+    "pc_polar_128x128": 0.02729551941579322
+  },
+  "zero_miss_sigma_50_radius_10": 0.019801326693244702,
+  "libraries": {
+    "numpy": "2.5.3",
+    "scipy": "1.16.2"
+  }
+}
