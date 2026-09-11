@@ -42,8 +42,8 @@ packages/   shared code, runs on client AND server
   engine/     ⬜ ECS · scene graph · events · serialization
   net/        ⬜ serialization · replication · prediction · reconciliation
 apps/
-  client/     🟡 WebGL2 renderer (Vite) — lit spheres, grid floor, live physics sandbox. Next: input abstraction · audio · prediction
-  server/     ⬜ authoritative simulation · matchmaking · persistence
+  client/     🟡 Cinematic WebGL2 engine (Vite) — PBR · PCF shadow maps · HDR+bloom · ACES tonemap, live physics sandbox
+  server/     🟡 Offline path tracer — GI · soft shadows · metals · depth of field → PNG (reuses @engine/math). Next: authoritative sim
 games/        ⬜ sandbox → racing → FPS → RTS → open world
 ```
 
