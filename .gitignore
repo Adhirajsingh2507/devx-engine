@@ -1,0 +1,6 @@
+.env
+.env.local
+.vercel
+repos/claude-code-best-practice/
+repos/hackathon-skills-marketplace/
+repos/2d-games/

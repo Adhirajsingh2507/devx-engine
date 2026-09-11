@@ -1,0 +1,465 @@
+<title>Personal CFO — Cost Analysis</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root{
+  --ground:#f4f2ea; --panel:#fbfaf5; --panel-2:#efece1;
+  --ink:#1b2029; --ink-soft:#55606e; --ink-faint:#8b95a1;
+  --line:#e0dccf; --line-strong:#cfc9b8;
+  --accent:#2f8f6b;      /* margin / positive */
+  --c-llm:#c9862e;       /* llm tokens */
+  --c-infra:#4a6a8a;     /* infrastructure */
+  --c-domain:#a8563f;    /* fixed / domain */
+  --good:#2f8f6b; --warn:#c9862e;
+  --shadow:0 1px 2px rgba(27,32,41,.06),0 8px 24px rgba(27,32,41,.06);
+}
+:root:not([data-theme="light"]) {}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --ground:#0f1720; --panel:#161f2b; --panel-2:#1d2836;
+    --ink:#eef1f4; --ink-soft:#a9b4c0; --ink-faint:#6b7885;
+    --line:#243040; --line-strong:#324356;
+    --accent:#4fb98c; --c-llm:#e0a34e; --c-infra:#6f97bf; --c-domain:#cd7a60;
+    --good:#4fb98c; --warn:#e0a34e;
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 10px 30px rgba(0,0,0,.35);
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#0f1720; --panel:#161f2b; --panel-2:#1d2836;
+  --ink:#eef1f4; --ink-soft:#a9b4c0; --ink-faint:#6b7885;
+  --line:#243040; --line-strong:#324356;
+  --accent:#4fb98c; --c-llm:#e0a34e; --c-infra:#6f97bf; --c-domain:#cd7a60;
+  --good:#4fb98c; --warn:#e0a34e;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 10px 30px rgba(0,0,0,.35);
+}
+*{box-sizing:border-box}
+body{
+  margin:0;background:var(--ground);color:var(--ink);
+  font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+  line-height:1.55;-webkit-font-smoothing:antialiased;
+}
+.num{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-variant-numeric:tabular-nums}
+.wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+a{color:var(--accent)}
+
+/* header */
+header.top{border-bottom:1px solid var(--line);background:var(--panel)}
+.masthead{padding:38px 0 30px}
+.eyebrow{font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);font-weight:600}
+h1{font-family:Georgia,'Times New Roman',serif;font-weight:600;font-size:clamp(30px,5vw,46px);
+   line-height:1.05;margin:.35em 0 .3em;text-wrap:balance;letter-spacing:-.01em}
+.lede{color:var(--ink-soft);max-width:60ch;font-size:17px;margin:0}
+.stamp{display:inline-flex;gap:8px;align-items:center;margin-top:16px;font-size:12.5px;color:var(--ink-faint)}
+.stamp b{color:var(--ink-soft);font-weight:600}
+
+/* control bar */
+.controls{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--panel) 92%,transparent);
+  backdrop-filter:blur(8px);border-bottom:1px solid var(--line);}
+.controls .wrap{display:flex;flex-wrap:wrap;gap:22px;align-items:center;padding:12px 24px}
+.cgroup{display:flex;align-items:center;gap:10px}
+.cgroup .lbl{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-faint);font-weight:600}
+.seg{display:inline-flex;border:1px solid var(--line-strong);border-radius:8px;overflow:hidden;background:var(--panel-2)}
+.seg button{appearance:none;border:0;background:transparent;color:var(--ink-soft);
+  padding:7px 14px;font:inherit;font-size:13px;cursor:pointer;font-variant-numeric:tabular-nums;
+  border-right:1px solid var(--line);transition:background .15s,color .15s}
+.seg button:last-child{border-right:0}
+.seg button[aria-pressed="true"]{background:var(--accent);color:#fff;font-weight:600}
+.seg button:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+#modelSel{appearance:none;background:var(--panel-2);color:var(--ink);border:1px solid var(--line-strong);
+  border-radius:8px;padding:7px 30px 7px 12px;font:inherit;font-size:13px;cursor:pointer;
+  background-image:linear-gradient(45deg,transparent 50%,var(--ink-soft) 50%),linear-gradient(135deg,var(--ink-soft) 50%,transparent 50%);
+  background-position:calc(100% - 16px) 15px,calc(100% - 11px) 15px;background-size:5px 5px,5px 5px;background-repeat:no-repeat}
+#modelSel:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+#modelSel optgroup{color:var(--ink);background:var(--panel)}
+
+/* sections */
+section{padding:44px 0}
+section+section{border-top:1px solid var(--line)}
+h2{font-family:Georgia,serif;font-weight:600;font-size:24px;margin:0 0 4px}
+.sub{color:var(--ink-soft);margin:0 0 26px;max-width:64ch}
+
+/* KPI row */
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.kpi{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px 18px 16px;box-shadow:var(--shadow)}
+.kpi .k-label{font-size:12px;color:var(--ink-faint);text-transform:uppercase;letter-spacing:.08em;font-weight:600}
+.kpi .k-val{font-size:30px;font-weight:600;margin-top:8px;letter-spacing:-.02em}
+.kpi .k-note{font-size:12.5px;color:var(--ink-soft);margin-top:4px}
+.kpi.hl{border-color:var(--accent)}
+.kpi.hl .k-val{color:var(--accent)}
+
+/* breakdown grid */
+.split{display:grid;grid-template-columns:300px 1fr;gap:34px;align-items:start}
+.donut-card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px;box-shadow:var(--shadow);text-align:center}
+.donut-total{font-size:12px;color:var(--ink-faint);text-transform:uppercase;letter-spacing:.08em;font-weight:600}
+.donut-total b{display:block;font-size:30px;color:var(--ink);letter-spacing:-.02em;margin-top:2px}
+svg.donut{width:220px;height:220px;margin:6px auto 4px}
+svg.donut .seg-arc{transition:opacity .15s}
+.legend{display:flex;flex-direction:column;gap:2px;margin-top:12px;text-align:left}
+.legend .row{display:flex;align-items:center;gap:10px;padding:6px 4px;border-radius:6px;cursor:default}
+.legend .row:hover{background:var(--panel-2)}
+.legend .dot{width:11px;height:11px;border-radius:3px;flex:0 0 auto}
+.legend .nm{flex:1;font-size:13.5px}
+.legend .vl{font-size:13.5px;font-weight:600}
+.legend .pc{font-size:12px;color:var(--ink-faint);width:42px;text-align:right}
+
+table{width:100%;border-collapse:collapse;font-size:14px}
+.tblwrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--panel);box-shadow:var(--shadow)}
+th,td{padding:12px 16px;text-align:left;border-bottom:1px solid var(--line);white-space:nowrap}
+th{font-size:11.5px;text-transform:uppercase;letter-spacing:.07em;color:var(--ink-faint);font-weight:600;background:var(--panel-2)}
+td.n,th.n{text-align:right}
+tr:last-child td{border-bottom:0}
+tfoot td{font-weight:700;background:var(--panel-2)}
+.cat-dot{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:8px;vertical-align:middle}
+
+.callout{background:var(--panel-2);border-left:3px solid var(--accent);border-radius:0 10px 10px 0;
+  padding:16px 20px;color:var(--ink-soft);font-size:14.5px;margin-top:24px}
+.callout b{color:var(--ink)}
+
+/* margin bars */
+.margins{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.mcard{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px;box-shadow:var(--shadow)}
+.mcard h3{margin:0;font-size:14px;font-weight:600;color:var(--ink-soft)}
+.mcard .big{font-size:34px;font-weight:700;color:var(--accent);letter-spacing:-.02em;margin:6px 0 2px}
+.bar{height:9px;border-radius:5px;background:var(--panel-2);overflow:hidden;margin-top:12px}
+.bar > span{display:block;height:100%;background:var(--accent)}
+.mrow{display:flex;justify-content:space-between;font-size:12.5px;color:var(--ink-soft);margin-top:8px}
+
+.assump{columns:2;column-gap:40px;font-size:14px;color:var(--ink-soft)}
+.assump li{margin:0 0 10px;break-inside:avoid}
+.assump b{color:var(--ink)}
+
+footer{border-top:1px solid var(--line);padding:26px 0 46px;color:var(--ink-faint);font-size:12.5px}
+
+@media (max-width:820px){
+  .kpis{grid-template-columns:1fr 1fr}
+  .split{grid-template-columns:1fr}
+  .donut-card{max-width:340px;margin:0 auto}
+  .margins{grid-template-columns:1fr}
+  .assump{columns:1}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<header class="top">
+  <div class="wrap masthead">
+    <div class="eyebrow">Cost of Ownership · Multi-Agent Personal CFO</div>
+    <h1>What it costs to run this, per client tier</h1>
+    <p class="lede">A full-disclosure cost model for the hosted-API architecture — deterministic finance engine, rule-based Judge, no GPU. Priced end to end for <b>10, 100, and 500 active clients</b>.</p>
+    <div class="stamp">Token prices pulled <b>2026-08-04</b> &nbsp;·&nbsp; GCP infra = 2026 estimates &nbsp;·&nbsp; figures recompute live below</div>
+  </div>
+</header>
+
+<div class="controls">
+  <div class="wrap">
+    <div class="cgroup">
+      <span class="lbl">Clients</span>
+      <div class="seg" id="segClients" role="group" aria-label="Active clients">
+        <button data-clients="10">10</button>
+        <button data-clients="100">100</button>
+        <button data-clients="500" aria-pressed="true">500</button>
+      </div>
+    </div>
+    <div class="cgroup">
+      <span class="lbl"><label for="modelSel">Model</label></span>
+      <select id="modelSel" aria-label="LLM model">
+        <optgroup label="Google Gemini">
+          <option value="flash_lite">Gemini 2.5 Flash-Lite — $0.10 / $0.40</option>
+          <option value="gemini_flash">Gemini 2.5 Flash — $0.30 / $2.50</option>
+          <option value="gemini_pro">Gemini 2.5 Pro — $1.25 / $10.00</option>
+        </optgroup>
+        <optgroup label="OpenAI GPT">
+          <option value="gpt5_nano">GPT-5 nano — $0.05 / $0.40</option>
+          <option value="gpt5_mini">GPT-5 mini — $0.125 / $1.00</option>
+        </optgroup>
+        <optgroup label="DeepSeek">
+          <option value="deepseek">DeepSeek V3 — $0.14 / $0.28</option>
+        </optgroup>
+        <optgroup label="Groq (LPU)">
+          <option value="groq_llama70b">Llama 3.3 70B — $0.59 / $0.79</option>
+        </optgroup>
+        <optgroup label="Moonshot Kimi">
+          <option value="kimi_k25">Kimi K2.5 — $0.60 / $3.00</option>
+          <option value="kimi_k26">Kimi K2.6 — $0.95 / $4.00</option>
+        </optgroup>
+        <optgroup label="Alibaba Qwen">
+          <option value="qwen72b">Qwen2.5 72B — $0.23 / $0.40</option>
+        </optgroup>
+        <optgroup label="Anthropic Claude">
+          <option value="haiku" selected>Claude Haiku 4.5 — $1.00 / $5.00</option>
+          <option value="sonnet">Claude Sonnet 5 — $3.00 / $15.00</option>
+        </optgroup>
+      </select>
+    </div>
+    <div class="cgroup">
+      <span class="lbl">Infra</span>
+      <div class="seg" id="segTier" role="group" aria-label="Infra tier">
+        <button data-tier="lean">Lean (free tiers)</button>
+        <button data-tier="comfortable" aria-pressed="true">Production</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<main class="wrap">
+
+  <section>
+    <div class="kpis">
+      <div class="kpi hl">
+        <div class="k-label">All-in / month</div>
+        <div class="k-val num" id="kTotal">—</div>
+        <div class="k-note" id="kTotalNote">everything: LLM + infra + domain</div>
+      </div>
+      <div class="kpi">
+        <div class="k-label">Cost / client / mo</div>
+        <div class="k-val num" id="kPerUser">—</div>
+        <div class="k-note">marginal + shared infra spread</div>
+      </div>
+      <div class="kpi">
+        <div class="k-label">LLM tokens / mo</div>
+        <div class="k-val num" id="kLLM">—</div>
+        <div class="k-note" id="kLLMNote">the only usage-driven line</div>
+      </div>
+      <div class="kpi">
+        <div class="k-label">Gross margin @ $5/mo</div>
+        <div class="k-val num" id="kMargin">—</div>
+        <div class="k-note" id="kMarginNote">revenue vs. total cost</div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Where the money goes</h2>
+    <p class="sub">The cost has exactly three parts. Only LLM tokens scale with usage — the rest is nearly flat, because there is no GPU idling and the arithmetic runs as free deterministic Python.</p>
+    <div class="split">
+      <div class="donut-card">
+        <svg class="donut" id="donut" viewBox="0 0 42 42" role="img" aria-label="Cost breakdown donut chart"></svg>
+        <div class="donut-total">Total / month<b class="num" id="donutTotal">—</b></div>
+        <div class="legend" id="legend"></div>
+      </div>
+      <div>
+        <div class="tblwrap">
+          <table>
+            <thead><tr><th>Line item</th><th>Service</th><th class="n">$ / month</th><th class="n">Share</th></tr></thead>
+            <tbody id="breakdownBody"></tbody>
+            <tfoot><tr><td colspan="2">Total</td><td class="n num" id="bdTotal">—</td><td class="n">100%</td></tr></tfoot>
+          </table>
+        </div>
+        <div class="callout" id="modelCallout"></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Per-query economics</h2>
+    <p class="sub">Every figure above rolls up from one query. A DECISION query runs ~2 LLM calls: a planning turn carrying the 7 tool schemas, then a synthesis turn over compact deterministic findings.</p>
+    <div class="tblwrap">
+      <table>
+        <thead><tr><th>Turn</th><th class="n">Input tokens</th><th class="n">Output tokens</th><th class="n">Cost (selected model)</th></tr></thead>
+        <tbody id="queryBody"></tbody>
+        <tfoot><tr><td>Per query</td><td class="n num">3,000</td><td class="n num">550</td><td class="n num" id="qCost">—</td></tr></tfoot>
+      </table>
+    </div>
+    <div class="callout">Assumes <b>60 queries / active client / month</b> — a personal CFO is bursty, not daily. Heavy users (150/mo) ≈ 2.5× this line; light users (20/mo) ≈ ⅓.</div>
+  </section>
+
+  <section>
+    <h2>Margin at every tier</h2>
+    <p class="sub">Priced at $5 / client / month against the currently selected model and infra tier. The deterministic core is what keeps this a high-margin SaaS shape.</p>
+    <div class="margins" id="marginCards"></div>
+  </section>
+
+  <section>
+    <h2>Full disclosure — assumptions &amp; caveats</h2>
+    <ul class="assump">
+      <li><b>Token model:</b> ~3,000 input + 550 output per query, 1–3 LLM calls, grounded in <b>orchestrator.py</b>. This is the durable part; prices drift.</li>
+      <li><b>Judge does 0 LLM calls</b> (rule-based, <b>judge.py</b>) and all math is deterministic (<b>finance_engine.py</b>) — the model only picks tools and writes prose.</li>
+      <li><b>LLM prices live 2026-08-04:</b> Flash-Lite $0.10/$0.40, Haiku 4.5 $1.00/$5.00, Sonnet 5 $3.00/$15.00 per 1M in/out. Re-pull before quoting.</li>
+      <li><b>Prompt-caching</b> the static tool-schema prefix (~10× cheaper input) roughly halves the input half of every LLM figure — not applied above, so these are conservative.</li>
+      <li><b>Infra = GCP estimates</b>, billed by exact usage: Cloud Run + Cloud SQL/Neon + Firebase Hosting/Auth. Ranges midpointed; re-price with the GCP calculator before committing.</li>
+      <li><b>Lean tier</b> = scale-to-zero + free Postgres/Auth. <b>Production</b> = warm instance + managed DB with backups + email + monitoring.</li>
+      <li><b>Domain</b> ~$1/mo (a <code>.com</code> at ~$12/yr). One-time build cost is $0 — the code exists.</li>
+      <li><b>Excludes</b> your own labor, marketing spend, bank-connector/Plaid fees (manual data), and paid analytics.</li>
+    </ul>
+  </section>
+
+</main>
+
+<footer class="wrap">
+  Sources: Anthropic <code>claude-api</code> pricing table (cached 2026-06-24); Gemini — ai.google.dev/gemini-api/docs/pricing (2026-08-04). Infra figures are estimates, not quotes. Built from <code>docs/COST_ANALYSIS.md</code> + <code>docs/TOTAL_COST.md</code>.
+</footer>
+
+<script>
+/* ---- single source of truth: the cost model ---- */
+const QUERIES_PER_USER = 60;
+const Q_IN = 3000, Q_OUT = 550;          // tokens per query
+const PLAN = {in:2000,out:200}, SYNTH = {in:1000,out:340};
+const PRICE = { // $/1M tokens (in / out), pulled 2026-08-11
+  flash_lite:   {in:0.10,  out:0.40,  name:'Gemini 2.5 Flash-Lite'},
+  gemini_flash: {in:0.30,  out:2.50,  name:'Gemini 2.5 Flash'},
+  gemini_pro:   {in:1.25,  out:10.00, name:'Gemini 2.5 Pro'},
+  gpt5_nano:    {in:0.05,  out:0.40,  name:'GPT-5 nano'},
+  gpt5_mini:    {in:0.125, out:1.00,  name:'GPT-5 mini'},
+  deepseek:     {in:0.14,  out:0.28,  name:'DeepSeek V3'},
+  groq_llama70b:{in:0.59,  out:0.79,  name:'Groq · Llama 3.3 70B'},
+  kimi_k25:     {in:0.60,  out:3.00,  name:'Kimi K2.5'},
+  kimi_k26:     {in:0.95,  out:4.00,  name:'Kimi K2.6'},
+  qwen72b:      {in:0.23,  out:0.40,  name:'Qwen2.5 72B'},
+  haiku:        {in:1.00,  out:5.00,  name:'Claude Haiku 4.5'},
+  sonnet:       {in:3.00,  out:15.00, name:'Claude Sonnet 5'},
+};
+const MODEL_NOTE = {
+  flash_lite:'Cheapest frontier-class option. Math is deterministic and the Judge is rule-based, so this is very likely sufficient — at this price, infra becomes your biggest cost.',
+  gemini_flash:'A step up in phrasing over Flash-Lite while staying cheap. (Note: Google lists 2.5 Flash for retirement 2026-10-16 — treat as a migration target.)',
+  gemini_pro:'Pro-grade reasoning if answer quality demands it; the output price is the driver since synthesis is the token-heavy turn.',
+  gpt5_nano:'The single cheapest per-query option here — nano input is $0.05/1M. Fine when the LLM only picks tools and writes short prose.',
+  gpt5_mini:'OpenAI’s balanced small model: cheap input, moderate output. Strong tool-calling reputation.',
+  deepseek:'Extremely cheap and symmetric ($0.14/$0.28). Off-peak and cache discounts cut it further. Open-weight lineage.',
+  groq_llama70b:'Open-weight Llama on Groq’s LPU — the draw is latency (very fast tokens), price is mid-low. Good if response speed matters.',
+  kimi_k25:'Moonshot’s open-weight K2.5 — strong agentic/tool-use scores at a low price. K2.6 is a small step up.',
+  kimi_k26:'Latest Kimi K2 line; slightly pricier than K2.5 for incremental quality.',
+  qwen72b:'Alibaba’s open-weight Qwen2.5 72B via third-party inference — cheap, capable, self-hostable if you ever want to leave the API.',
+  haiku:'The balanced default: strong phrasing and tool-selection at a fraction of a premium model, since the LLM never does arithmetic.',
+  sonnet:'Premium phrasing for a finance product. Overkill on reasoning — the model isn’t doing the numbers — but the highest-quality prose.',
+};
+// infra $/mo by client count and tier (midpoints of documented ranges; 500 interpolated 100↔1000)
+const INFRA = {
+  lean:        {10:1,   100:12,  500:40},
+  comfortable: {10:10,  100:58,  500:120},
+};
+const DOMAIN = 1;
+const CATS = {llm:'var(--c-llm)', infra:'var(--c-infra)', domain:'var(--c-domain)'};
+
+const state = {clients:500, model:'haiku', tier:'comfortable'};
+
+const perQueryCost = m => (Q_IN*PRICE[m].in + Q_OUT*PRICE[m].out)/1e6;
+const llmMonthly = (clients,m) => clients*QUERIES_PER_USER*perQueryCost(m);
+const fmt = n => n>=100 ? '$'+Math.round(n).toLocaleString()
+             : n>=10 ? '$'+n.toFixed(1)
+             : '$'+n.toFixed(2);
+
+function compute(clients,model,tier){
+  const llm = llmMonthly(clients,model);
+  const infra = INFRA[tier][clients];
+  const domain = DOMAIN;
+  const total = llm+infra+domain;
+  return {llm,infra,domain,total,perUser:total/clients,
+    revenue:clients*5, margin:(clients*5-total)/(clients*5)};
+}
+
+function render(){
+  const {clients,model,tier}=state;
+  const c=compute(clients,model,tier);
+
+  document.getElementById('kTotal').textContent=fmt(c.total);
+  document.getElementById('kTotalNote').textContent=`${PRICE[model].name} · ${tier==='lean'?'lean':'production'} infra`;
+  document.getElementById('kPerUser').textContent=fmt(c.perUser);
+  document.getElementById('kLLM').textContent=fmt(c.llm);
+  document.getElementById('kLLMNote').textContent=`${(clients*QUERIES_PER_USER).toLocaleString()} queries/mo`;
+  const mp=Math.round(c.margin*100);
+  document.getElementById('kMargin').textContent=mp+'%';
+  document.getElementById('kMarginNote').textContent=`$${c.revenue.toLocaleString()} rev − ${fmt(c.total)} cost`;
+
+  // breakdown table + donut
+  const parts=[
+    {key:'llm',   nm:'LLM tokens',    svc:PRICE[model].name,            v:c.llm},
+    {key:'infra', nm:'Infrastructure',svc:tier==='lean'?'Cloud Run + free Postgres':'Cloud Run + Cloud SQL + Firebase', v:c.infra},
+    {key:'domain',nm:'Domain',        svc:'.com registration',          v:c.domain},
+  ];
+  const body=document.getElementById('breakdownBody'); body.innerHTML='';
+  parts.forEach(p=>{
+    const pc=(p.v/c.total*100);
+    body.insertAdjacentHTML('beforeend',
+      `<tr><td><span class="cat-dot" style="background:${CATS[p.key]}"></span>${p.nm}</td>
+       <td style="color:var(--ink-soft)">${p.svc}</td>
+       <td class="n num">${fmt(p.v)}</td><td class="n num">${pc.toFixed(pc<1?1:0)}%</td></tr>`);
+  });
+  document.getElementById('bdTotal').textContent=fmt(c.total);
+  document.getElementById('donutTotal').textContent=fmt(c.total);
+  drawDonut(parts,c.total);
+
+  // legend
+  const lg=document.getElementById('legend'); lg.innerHTML='';
+  parts.forEach(p=>{
+    const pc=p.v/c.total*100;
+    lg.insertAdjacentHTML('beforeend',
+      `<div class="row"><span class="dot" style="background:${CATS[p.key]}"></span>
+       <span class="nm">${p.nm}</span><span class="vl num">${fmt(p.v)}</span>
+       <span class="pc num">${pc.toFixed(pc<1?1:0)}%</span></div>`);
+  });
+
+  document.getElementById('modelCallout').innerHTML=`<b>${PRICE[model].name}:</b> ${MODEL_NOTE[model]}`;
+
+  // per-query table
+  const qc=perQueryCost(model);
+  const rows=[
+    {t:'Plan (7 tool schemas + system + query)', ...PLAN},
+    {t:'Synthesis (deterministic findings)', ...SYNTH},
+  ];
+  const qb=document.getElementById('queryBody'); qb.innerHTML='';
+  rows.forEach(r=>{
+    const cost=(r.in*PRICE[model].in+r.out*PRICE[model].out)/1e6;
+    qb.insertAdjacentHTML('beforeend',
+      `<tr><td>${r.t}</td><td class="n num">${r.in.toLocaleString()}</td>
+       <td class="n num">${r.out}</td><td class="n num">$${cost.toFixed(4)}</td></tr>`);
+  });
+  document.getElementById('qCost').textContent='$'+qc.toFixed(4);
+
+  // margin cards across all tiers (using current model+infra tier)
+  const mc=document.getElementById('marginCards'); mc.innerHTML='';
+  [10,100,500].forEach(n=>{
+    const cc=compute(n,model,tier); const pct=Math.round(cc.margin*100);
+    mc.insertAdjacentHTML('beforeend',
+      `<div class="mcard"><h3>${n} clients</h3>
+       <div class="big num">${pct}%</div>
+       <div class="bar"><span style="width:${Math.max(0,pct)}%"></span></div>
+       <div class="mrow"><span>Revenue $${cc.revenue.toLocaleString()}</span><span>Cost ${fmt(cc.total)}</span></div>
+       <div class="mrow"><span>Profit / mo</span><span class="num">${fmt(cc.revenue-cc.total)}</span></div>
+       </div>`);
+  });
+
+  syncButtons();
+}
+
+function drawDonut(parts,total){
+  const svg=document.getElementById('donut');
+  const R=15.915, C=2*Math.PI*R; // circumference ≈ 100 units
+  let off=25; // start at top
+  let out='<circle cx="21" cy="21" r="15.915" fill="none" stroke="var(--panel-2)" stroke-width="6"/>';
+  parts.forEach(p=>{
+    const frac=total>0?p.v/total:0; const len=frac*100;
+    out+=`<circle class="seg-arc" cx="21" cy="21" r="15.915" fill="none"
+      stroke="${CATS[p.key]}" stroke-width="6"
+      stroke-dasharray="${len.toFixed(3)} ${(100-len).toFixed(3)}"
+      stroke-dashoffset="${off.toFixed(3)}" transform="rotate(-90 21 21)"
+      stroke-linecap="butt"><title>${p.nm}: ${fmt(p.v)}</title></circle>`;
+    off-=len;
+  });
+  svg.innerHTML=out;
+}
+
+function syncButtons(){
+  document.querySelectorAll('#segClients button').forEach(b=>b.setAttribute('aria-pressed', +b.dataset.clients===state.clients));
+  document.getElementById('modelSel').value=state.model;
+  document.querySelectorAll('#segTier button').forEach(b=>b.setAttribute('aria-pressed', b.dataset.tier===state.tier));
+}
+
+document.getElementById('segClients').addEventListener('click',e=>{
+  const b=e.target.closest('button'); if(!b)return; state.clients=+b.dataset.clients; render();});
+document.getElementById('modelSel').addEventListener('change',e=>{
+  state.model=e.target.value; render();});
+document.getElementById('segTier').addEventListener('click',e=>{
+  const b=e.target.closest('button'); if(!b)return; state.tier=b.dataset.tier; render();});
+
+render();
+
+/* ---- self-check (open console) ---- */
+(function check(){
+  console.assert(Math.abs(perQueryCost('flash_lite')-0.00052)<5e-4,'flash-lite per-query');
+  console.assert(Math.abs(perQueryCost('haiku')-0.00575)<5e-4,'haiku per-query ~$0.0058');
+  console.assert(perQueryCost('gpt5_nano')<perQueryCost('flash_lite'),'nano is cheapest');
+  console.assert(Math.abs(llmMonthly(100,'haiku')-34.5)<2,'100 haiku ~$35/mo');
+  console.assert(Math.abs(llmMonthly(500,'flash_lite')-15.6)<1,'500 flash-lite ~$16/mo');
+  const c=compute(500,'haiku','comfortable');
+  console.assert(c.margin>0.85&&c.margin<0.92,'500 haiku margin ~88%');
+  console.log('cost-model self-check passed');
+})();
+</script>
