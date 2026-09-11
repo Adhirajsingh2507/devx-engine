@@ -21,6 +21,15 @@ def _env_bool(name: str, default: bool) -> bool:
     return os.environ.get(name, str(default)).strip().lower() in {"1", "true", "yes", "on"}
 
 
+def _rust_core_available() -> bool:
+    try:
+        import orbit_core  # noqa: F401  (compiled PyO3 extension)
+
+        return True
+    except Exception:
+        return False
+
+
 @app.get("/api/v1/health")
 def health() -> dict:
     """Liveness and build ID. No secrets, no external calls (doc 05)."""
@@ -34,11 +43,12 @@ def capabilities() -> dict:
     Reports only names and booleans; never secret values. GROQ_ENABLED=false
     yields the labeled deterministic fallback (docs 09/14)."""
     groq_enabled = _env_bool("GROQ_ENABLED", False)
+    rust = _rust_core_available()
     return {
         "app_mode": os.environ.get("APP_MODE", "public_synthetic"),
         "policy_version": os.environ.get("POLICY_VERSION", "demo-2.0"),
-        "numerical_engine": "python-reference",  # rust/pyo3 core: pending toolchain (M0)
-        "rust_core_available": False,
+        "numerical_engine": "rust-orbit-core" if rust else "python-reference",
+        "rust_core_available": rust,
         "supported_encounter_model": "short_linear_gaussian_independent",
         "groq_enabled": groq_enabled,
         "groq_model": os.environ.get("GROQ_MODEL", "openai/gpt-oss-20b") if groq_enabled else None,

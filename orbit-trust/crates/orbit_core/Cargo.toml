@@ -13,3 +13,7 @@ crate-type = ["cdylib"]
 # per platform across 3.12+. Rayon for bounded pair batches lands in M3.
 [dependencies]
 pyo3 = { version = "0.22", features = ["extension-module", "abi3-py312"] }
+rayon = "1"
+
+[profile.release]
+lto = true

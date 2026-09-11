@@ -10,3 +10,4 @@ apps/web/out/
 node_modules/
 # native build artifacts (the tested wheel in vendor/wheels/ IS committed, doc 14)
 target/
+.venv*/

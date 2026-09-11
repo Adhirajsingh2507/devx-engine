@@ -15,10 +15,10 @@ measured customer outcomes.
 ## Environment discovered this session
 | Item | Found | Spec (doc) | Action |
 | --- | --- | --- | --- |
-| Python | 3.10.12 | 3.12 (D23) | Install 3.12 before wheel/abi3 + provider spikes |
+| Python | 3.10.12 (system) + 3.12.14 (uv) | 3.12 (D23) | 3.12 installed via uv; build venv .venv312 |
 | Node | 25.8.2 | 22 LTS (D23) | Confirm 22 in CI; local dev works |
 | pnpm | 9.15.0 | 10 (D23) | Bump to 10 for web workspace |
-| Rust/cargo/maturin | MISSING | stable (D24) | Install toolchain to build native wheel |
+| Rust/cargo | 1.98.1 (rustup) | stable (D24) | INSTALLED; maturin 1.15 in venv |
 | fastapi/uvicorn/pydantic/numpy/scipy | present | — | Reference oracle + API run now |
 | jsonschema | MISSING | needed M1 | Add for schema validation |
 | Groq key | ABSENT | required for live (R10) | Spike C + M5 live run BLOCKED |
@@ -49,9 +49,10 @@ No larger deviations found; implementation tracks the handoff.
 ## Milestone status
 | Milestone | Status | Notes |
 | --- | --- | --- |
-| M0 deployment path | PARTIAL | Skeleton + reference oracle + FastAPI health/capabilities run. Rust wheel + Supabase + Groq spikes BLOCKED (toolchain/creds). |
+| M0 deployment path | PARTIAL | Skeleton + reference oracle + FastAPI health/capabilities run. Rust wheel spike DONE (abi3-py312 manylinux_2_34 wheel built, imported, validated). Supabase + Groq spikes BLOCKED (creds). Vercel import-in-function verification pending a project. |
+| N1 Rust production core | DONE | orbit_core: projection + GL/periodic-trapezoid polar quadrature with two-grid convergence gate + Rayon batch. Matches Python oracle across T01-T10; wheel + build-manifest in vendor/wheels/. Benchmark (2000 problems): seq-Python 3400ms, seq-Rust 3310ms, parallel-Rust 483ms (6.8x), cached 83ms. |
 | M1 contracts/storage | PARTIAL | Strict Pydantic contract; domain validation + import classification; report ledger dedup/conflict/pair (T16-T18); canonical digest. supabase/migrations/0001_core.sql written (UNAPPLIED - no creds). RPCs/seed + live auth/isolation BLOCKED. |
-| M2 scientific core | PARTIAL | Python oracle passes T01-T06/T10; covariance validity + unsupported/precision states (T07-T09); deadline P0-P3 policy + ack floor (T12/T14). Rust production port + T11/T13/T15 pending. |
+| M2 scientific core | PARTIAL | Python oracle passes T01-T06/T10; covariance validity + unsupported/precision states (T07-T09); deadline P0-P3 policy + ack floor (T12/T14). Rust production port DONE (orbit_core, validated vs oracle). T11/T13/T15 (assessment engine) pending. |
 | M3 fleet/comms | PARTIAL | Fleet comparison engine (T25-T26 hero reversal) + communication timing/state machine (T28), both wired as compute-only API endpoints. Bounded chunks / DB leases / resumable batches / benchmark modes BLOCKED (no DB). |
 | M4 consequence/reentry | PARTIAL | Decimal expected-loss economics (T29-T30) + reentry exposure with holes/boundary + conditional damage (T31-T33), wired as compute-only endpoints. Reentry cannot alter orbital policy (separate module). |
 | M5 agent | NOT_STARTED | |
@@ -85,6 +86,7 @@ No larger deviations found; implementation tracks the handoff.
 | T32 (alt footprint + geometry rejects) | PASS | alt footprint exposes pop-outside/asset-D (INR 100,000); rejects unordered window / dateline / latitude>85 / unclosed ring / self-intersection / uncontained hole / >1000 points |
 | T33 (missing vulnerability) | PASS | exposure available, damage unavailable_missing_vulnerability |
 | positive import | PASS | all 10 fixture inputs accepted through Record union |
+| Rust core vs oracle (T01-T10) | PASS | orbit_core.project_and_pc matches orbit_trust.numerics + fixtures within 1e-6 rel; batch==sequential; error paths raise (.venv312) |
 | all others | NOT_RUN | later milestones |
 
 ## Next executable ticket
