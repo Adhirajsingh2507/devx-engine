@@ -11,8 +11,8 @@ import os
 
 from fastapi import FastAPI
 
-from . import BUILD_ID, __version__, comms, fleet, numerics
-from .models import CandidateSet, CommunicationScenario
+from . import BUILD_ID, __version__, comms, economics, fleet, numerics, reentry
+from .models import CandidateSet, CommunicationScenario, EconomicScenario, ReentryScenario
 
 app = FastAPI(title="ORBIT-TRUST API", version=__version__)
 
@@ -65,3 +65,20 @@ def communications_simulate(scenario: CommunicationScenario) -> dict:
     """Timing feasibility for a supplied communication scenario (doc 07).
     Simulation only; no real transmission."""
     return comms.timing_feasibility(scenario.model_dump())
+
+
+# --- M4 compute-only endpoints ---------------------------------------------
+
+
+@app.post("/api/v1/economics/evaluate")
+def economics_evaluate(scenario: EconomicScenario) -> dict:
+    """Conditional expected-loss change (doc 08). Decimal arithmetic; unknown
+    probability/loss or mixed currency -> unavailable, never a fabricated saving."""
+    return economics.evaluate(scenario.model_dump())
+
+
+@app.post("/api/v1/reentry/evaluate")
+def reentry_evaluate(scenario: ReentryScenario) -> dict:
+    """Exposure and optional conditional damage under a supplied footprint
+    (doc 08). Not a predicted crash location; missing value stays unknown."""
+    return reentry.evaluate(scenario.model_dump())

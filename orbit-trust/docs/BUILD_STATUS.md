@@ -53,7 +53,7 @@ No larger deviations found; implementation tracks the handoff.
 | M1 contracts/storage | PARTIAL | Strict Pydantic contract; domain validation + import classification; report ledger dedup/conflict/pair (T16-T18); canonical digest. supabase/migrations/0001_core.sql written (UNAPPLIED - no creds). RPCs/seed + live auth/isolation BLOCKED. |
 | M2 scientific core | PARTIAL | Python oracle passes T01-T06/T10; covariance validity + unsupported/precision states (T07-T09); deadline P0-P3 policy + ack floor (T12/T14). Rust production port + T11/T13/T15 pending. |
 | M3 fleet/comms | PARTIAL | Fleet comparison engine (T25-T26 hero reversal) + communication timing/state machine (T28), both wired as compute-only API endpoints. Bounded chunks / DB leases / resumable batches / benchmark modes BLOCKED (no DB). |
-| M4 consequence/reentry | NOT_STARTED | |
+| M4 consequence/reentry | PARTIAL | Decimal expected-loss economics (T29-T30) + reentry exposure with holes/boundary + conditional damage (T31-T33), wired as compute-only endpoints. Reentry cannot alter orbital policy (separate module). |
 | M5 agent | NOT_STARTED | |
 | M6 console | NOT_STARTED | |
 | M7 release | NOT_STARTED | |
@@ -79,16 +79,22 @@ No larger deviations found; implementation tracks the handoff.
 | T25 (A-B fix creates A-C) | PASS | candidate-one blocked; every pair's pc/evidence visible |
 | T26 (candidate dispositions) | PASS | baseline+one blocked, two passes; preferred=candidate-two; pc matches fixture |
 | T28 (comms simulation) | PASS | scripted authorize/send/ack/execute; reject_send / expired / failed / reject_auth / timing_unknown |
+| T29 (reference economics) | PASS | 100000 before, 1000 after, 99000 reduction, 79000 net (Decimal) |
+| T30 (economics guards) | PASS | mixed currency / unknown prob -> unavailable; negative net -21000 shown, not clipped |
+| T31 (footprint holes/boundary) | PASS | pop 150, value INR 1,500,000, damage INR 150,000; hole excluded, boundary included |
+| T32 (alt footprint) | PASS | alternative footprint exposes pop-outside/asset-D, INR 100,000 |
+| T33 (missing vulnerability) | PASS | exposure available, damage unavailable_missing_vulnerability |
 | positive import | PASS | all 10 fixture inputs accepted through Record union |
 | all others | NOT_RUN | later milestones |
 
 ## Next executable ticket
-M4 (no creds): consequence models + reentry sandbox — decimal expected-loss
-(T29-T30 vs economics.json: 100000/1000/99000/79000), regional polygon
-validation + point-in-polygon with holes/boundaries + dedup (T31-T32 vs
-reentry.json: represented pop 150, exposed value INR 1,500,000, conditional
-damage INR 150,000), optional conditional damage (T33). Then M2 Rust port once
-toolchain installed. DB/auth/Groq spikes remain BLOCKED.
+Remaining no-creds work: M2 Rust port (needs local rustup+maturin) validated
+against orbit_trust.numerics; M3 bounded-chunk/lease semantics as pure logic;
+polygon geometry rejects (dateline/self-intersection, T32 negative side). Then
+the credential-gated milestones: M1 Supabase RPCs/seed + live auth/isolation,
+M5 bounded ADK/Groq agent + fallback, M6 Next.js console, M7 release. These stay
+BLOCKED until owner supplies Supabase + Groq creds and a dedicated ORBIT-TRUST
+Vercel project, and the Rust toolchain + Python 3.12 are installed locally.
 
 ## Credential gates blocking progress
 1. Rust toolchain (rustup + maturin) — local install, no owner needed.
