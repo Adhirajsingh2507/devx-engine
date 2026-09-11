@@ -40,8 +40,8 @@ measured customer outcomes.
 | Milestone | Status | Notes |
 | --- | --- | --- |
 | M0 deployment path | PARTIAL | Skeleton + reference oracle + FastAPI health/capabilities run. Rust wheel + Supabase + Groq spikes BLOCKED (toolchain/creds). |
-| M1 contracts/storage | PARTIAL | Strict Pydantic models for whole contract; domain validation + import classification. Supabase tables/RLS/RPCs + dedup/conflict + auth BLOCKED (no creds). |
-| M2 scientific core | PARTIAL | Python oracle passes T01-T06/T10; covariance validity (T07); deadline P0-P3 policy + ack floor (T12/T14). Rust production port + T08/T09/T11/T13/T15 pending. |
+| M1 contracts/storage | PARTIAL | Strict Pydantic contract; domain validation + import classification; report ledger dedup/conflict/pair (T16-T18); canonical digest. supabase/migrations/0001_core.sql written (UNAPPLIED - no creds). RPCs/seed + live auth/isolation BLOCKED. |
+| M2 scientific core | PARTIAL | Python oracle passes T01-T06/T10; covariance validity + unsupported/precision states (T07-T09); deadline P0-P3 policy + ack floor (T12/T14). Rust production port + T11/T13/T15 pending. |
 | M3 fleet/comms | NOT_STARTED | |
 | M4 consequence/reentry | NOT_STARTED | |
 | M5 agent | NOT_STARTED | |
@@ -59,8 +59,13 @@ measured customer outcomes.
 | T06 (translation invariance) | PASS | common shift -> relative result unchanged |
 | T07 (invalid covariance / schema) | PASS | negative-variance -> domain_invalid_covariance; missing-frame / pc>1 -> schema_422; same-object -> domain_pair_mismatch |
 | T10 (radius monotonic) | PASS | pc non-decreasing in R |
+| T08 (unsupported states) | PASS | low relative speed / tca outside interval / invalid covariance -> unsupported, pc null |
+| T09 (precision) | PASS | underflow -> below_computable_precision, no definitive zero |
 | T12 (deadline tiers) | PASS | +40m/2h/unknown/exact/passed -> P1/P2/P1/P1/P0 |
 | T14 (ack floor holds) | PASS | downgrade after urgent held until latest-version ack |
+| T16 (dedup / out-of-order) | PASS | identical retry dedup; older revision preserves current |
+| T17 (source conflict) | PASS | same revision + different body -> retained conflict |
+| T18 (event-pair conflict) | PASS | reused event_key with different pair -> reject_association |
 | positive import | PASS | all 10 fixture inputs accepted through Record union |
 | all others | NOT_RUN | later milestones |
 

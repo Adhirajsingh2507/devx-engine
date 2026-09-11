@@ -98,11 +98,9 @@ def project_encounter(primary: dict, secondary: dict, *, independent: bool = Tru
 
     r = r_s - r_p
     v = v_s - v_p
-    vv = float(v @ v)
-    tau = -float(r @ v) / vv  # unconstrained TCA relative to epoch
+    e1, e2 = _encounter_plane_basis(v)  # raises on relative speed < 1 m/s (doc 06)
+    tau = -float(r @ v) / float(v @ v)  # unconstrained TCA relative to epoch
     miss_vec = r + tau * v
-
-    e1, e2 = _encounter_plane_basis(v)
     b = np.vstack([e1, e2])  # 2x3
     c_rel = c_p + c_s  # independent errors (doc 06)
 
@@ -165,6 +163,56 @@ def collision_probability(projection: Projection) -> float:
     if _is_isotropic(cov):
         return pc_isotropic(projection.miss_distance_m, math.sqrt(cov[0, 0]), projection.combined_radius_m)
     return pc_general(projection.mean_m, cov, projection.combined_radius_m)
+
+
+def evaluate_encounter(encounter: dict) -> dict:
+    """Full supported-domain evaluation of an Encounter dict (doc 06).
+
+    Returns {status, tca_offset_s, miss_distance_m, pc, reason}. status is
+    `supported`, or an explicit unsupported/precision state — never a zero-risk
+    substitute for an unrunnable calculation.
+    """
+    domain = encounter.get("domain", {})
+    if domain.get("cross_object_dependence") != "independent":
+        return {"status": "unsupported", "reason": "cross_covariance_not_supported", "pc": None}
+
+    primary, secondary = encounter["primary"], encounter["secondary"]
+    for obj in (primary, secondary):
+        ok, reason = covariance_status(obj["position_covariance_m2"])
+        if not ok:
+            return {"status": "unsupported", "reason": reason, "pc": None}
+
+    try:
+        proj = project_encounter(primary, secondary)
+    except ValueError as exc:  # e.g. relative_speed_below_supported_minimum
+        return {"status": "unsupported", "reason": str(exc), "pc": None}
+
+    # A clipped-endpoint closest approach is not a completed encounter (doc 06).
+    start = encounter["interval_start_offset_s"]
+    end = encounter["interval_end_offset_s"]
+    if not (start <= proj.tca_offset_s <= end):
+        return {
+            "status": "unsupported",
+            "reason": "tca_outside_supported_interval",
+            "tca_offset_s": proj.tca_offset_s,
+            "pc": None,
+        }
+
+    try:
+        pc = collision_probability(proj)
+    except ValueError as exc:
+        return {"status": "unsupported", "reason": str(exc), "pc": None}
+
+    base = {
+        "tca_offset_s": proj.tca_offset_s,
+        "miss_distance_m": proj.miss_distance_m,
+        "combined_radius_m": proj.combined_radius_m,
+    }
+    if pc == 0.0:
+        # Underflow without an error bound: report explicitly, never claim an
+        # impossible collision (doc 06).
+        return {"status": "below_computable_precision", "pc": None, **base}
+    return {"status": "supported", "pc": pc, **base}
 
 
 def smoke() -> dict:
