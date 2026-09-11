@@ -36,6 +36,16 @@ measured customer outcomes.
 - Pre-existing uncommitted `3d-game/.gitignore` mod is the owner's; left untouched.
 - Verify at release: `git ls-tree -r HEAD 3d-game` unchanged.
 
+## Handoff conformance audit (PDF vs implementation)
+Confirmed ORBIT_TRUST_IMPLEMENTATION_HANDOFF.pdf is the verbatim render of docs
+00-19 (spot-checked; PACKAGE_DOCUMENT_QA confirms full parity). Audited code vs
+spec and corrected two deviations:
+- doc 06: pc_general now surfaces `numerical_nonconvergence` on a large quadrature
+  error instead of silently returning a Pc; evaluate_encounter maps that status.
+- doc 05: import_summary now reports accepted / deduplicated / conflicted /
+  rejected (+retained unsupported) by running report records through the ledger.
+No larger deviations found; implementation tracks the handoff.
+
 ## Milestone status
 | Milestone | Status | Notes |
 | --- | --- | --- |

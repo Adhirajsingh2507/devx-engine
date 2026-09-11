@@ -153,7 +153,12 @@ def pc_general(mean: tuple[float, float], cov, radius: float) -> float:
         d = p - m
         return norm * math.exp(-0.5 * float(d @ s_inv @ d)) * rho
 
-    value, _err = integrate.dblquad(integrand, 0.0, 2.0 * math.pi, 0.0, radius)
+    value, err = integrate.dblquad(integrand, 0.0, 2.0 * math.pi, 0.0, radius)
+    # Accept only a converged result (doc 06): a large quadrature error estimate
+    # yields numerical_nonconvergence, never a silently wrong Pc. (The production
+    # Rust core uses the two-grid comparison protocol from doc 06.)
+    if err > max(1e-8, 1e-6 * abs(value)):
+        raise ValueError("numerical_nonconvergence")
     return float(value)
 
 
@@ -201,7 +206,9 @@ def evaluate_encounter(encounter: dict) -> dict:
     try:
         pc = collision_probability(proj)
     except ValueError as exc:
-        return {"status": "unsupported", "reason": str(exc), "pc": None}
+        reason = str(exc)
+        status = "numerical_nonconvergence" if reason == "numerical_nonconvergence" else "unsupported"
+        return {"status": status, "reason": reason, "pc": None}
 
     base = {
         "tca_offset_s": proj.tca_offset_s,

@@ -15,6 +15,7 @@ from typing import Optional
 
 from pydantic import TypeAdapter, ValidationError
 
+from . import ledger as _ledger
 from . import numerics
 from .models import Record, Report
 
@@ -77,24 +78,41 @@ def _classify_report(r: Report, kind: str) -> RecordOutcome:
 
 
 def import_summary(objs: list[dict]) -> dict:
-    """Per-record acceptance/rejection report (doc 05). Deduplication and
-    source-conflict detection (which need the workspace ledger) arrive with the
-    storage layer in M1; this covers structural + domain classification."""
-    accepted = rejected = unsupported = 0
+    """Per-record import report (doc 05): accepted, deduplicated, conflicted,
+    rejected and retained-unsupported counts. Report records are run through a
+    ReportLedger so within-batch dedup/conflict/event-pair are detected. The M1
+    Supabase transaction enforces the same rules against stored state atomically.
+    """
+    lg = _ledger.ReportLedger()
+    counts = {"accepted": 0, "deduplicated": 0, "conflicted": 0, "rejected": 0, "unsupported": 0}
     errors = []
     for i, obj in enumerate(objs):
         outcome = classify_record(obj)
-        if outcome.status == ACCEPT:
-            accepted += 1
-        elif outcome.status == UNSUPPORTED:
-            unsupported += 1
-            errors.append({"index": i, "status": UNSUPPORTED, "reason": outcome.reason})
-        else:
-            rejected += 1
+        if outcome.status == REJECT:
+            counts["rejected"] += 1
             errors.append({"index": i, "status": REJECT, "reason": outcome.reason})
-    return {
-        "accepted": accepted,
-        "rejected": rejected,
-        "unsupported": unsupported,
-        "errors": errors,
-    }
+            continue
+
+        if outcome.kind == "encounter_report":
+            res = lg.ingest(obj)
+            if res == _ledger.REJECT_PAIR:
+                counts["rejected"] += 1
+                errors.append({"index": i, "status": REJECT, "reason": _ledger.REJECT_PAIR})
+                continue
+            if res == _ledger.DEDUP:
+                counts["deduplicated"] += 1
+                continue
+            if res == _ledger.CONFLICT:
+                counts["conflicted"] += 1  # retained conflict, not an overwrite
+                continue
+            # CURRENT or PRESERVE: stored. A retained-but-unsupported calculation
+            # is reported distinctly from a clean accept.
+            if outcome.status == UNSUPPORTED:
+                counts["unsupported"] += 1
+                errors.append({"index": i, "status": UNSUPPORTED, "reason": outcome.reason})
+            else:
+                counts["accepted"] += 1
+        else:
+            counts["accepted"] += 1
+
+    return {**counts, "errors": errors}
