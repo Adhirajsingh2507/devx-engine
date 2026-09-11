@@ -82,12 +82,13 @@ No larger deviations found; implementation tracks the handoff.
 | T29 (reference economics) | PASS | 100000 before, 1000 after, 99000 reduction, 79000 net (Decimal) |
 | T30 (economics guards) | PASS | mixed currency / unknown prob -> unavailable; negative net -21000 shown, not clipped |
 | T31 (footprint holes/boundary) | PASS | pop 150, value INR 1,500,000, damage INR 150,000; hole excluded, boundary included |
-| T32 (alt footprint) | PASS | alternative footprint exposes pop-outside/asset-D, INR 100,000 |
+| T32 (alt footprint + geometry rejects) | PASS | alt footprint exposes pop-outside/asset-D (INR 100,000); rejects unordered window / dateline / latitude>85 / unclosed ring / self-intersection / uncontained hole / >1000 points |
 | T33 (missing vulnerability) | PASS | exposure available, damage unavailable_missing_vulnerability |
 | positive import | PASS | all 10 fixture inputs accepted through Record union |
 | all others | NOT_RUN | later milestones |
 
 ## Next executable ticket
+Full forward plan with per-phase gates and acceptance: see `docs/NEXT_PHASE.md`.
 Remaining no-creds work: M2 Rust port (needs local rustup+maturin) validated
 against orbit_trust.numerics; M3 bounded-chunk/lease semantics as pure logic;
 polygon geometry rejects (dateline/self-intersection, T32 negative side). Then

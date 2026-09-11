@@ -15,9 +15,12 @@ from __future__ import annotations
 
 from decimal import Decimal
 
+from .models import parse_utc
 from .money import dec, fmt
 
 _EPS = 1e-12
+_MAX_POINTS = 1000  # combined population + asset points (doc 05)
+_MAX_ABS_LAT = 85.0  # doc 05/08: latitude within [-85, 85]
 
 
 def _on_segment(p, a, b) -> bool:
@@ -67,6 +70,61 @@ def point_in_geometry(p, geom: dict) -> bool:
     return any(_in_polygon(p, poly) for poly in geom["coordinates"])
 
 
+def _orient(a, b, c) -> float:
+    return (b[0] - a[0]) * (c[1] - a[1]) - (b[1] - a[1]) * (c[0] - a[0])
+
+
+def _proper_cross(p1, p2, p3, p4) -> bool:
+    d1, d2 = _orient(p3, p4, p1), _orient(p3, p4, p2)
+    d3, d4 = _orient(p1, p2, p3), _orient(p1, p2, p4)
+    return (d1 > 0) != (d2 > 0) and (d3 > 0) != (d4 > 0)
+
+
+def _self_intersects(ring) -> bool:
+    # ponytail: naive O(n^2) edge-pair scan; rings here are small.
+    edges = [(ring[i], ring[i + 1]) for i in range(len(ring) - 1)]
+    n = len(edges)
+    for i in range(n):
+        for j in range(i + 1, n):
+            if abs(i - j) <= 1 or (i == 0 and j == n - 1):
+                continue  # adjacent edges legitimately share a vertex
+            if _proper_cross(*edges[i], *edges[j]):
+                return True
+    return False
+
+
+def _validate_geometry(geom: dict) -> str | None:
+    polys = [geom["coordinates"]] if geom["type"] == "Polygon" else geom["coordinates"]
+    for rings in polys:
+        for ring in rings:
+            if ring[0] != ring[-1]:
+                return "domain_ring_not_closed"
+            if any(abs(lat) > _MAX_ABS_LAT for _lon, lat in ring):
+                return "domain_latitude_out_of_range"
+            # an edge spanning >180deg of longitude crosses the antimeridian
+            if any(abs(ring[i][0] - ring[i + 1][0]) > 180 for i in range(len(ring) - 1)):
+                return "domain_dateline_crossing"
+            if _self_intersects(ring):
+                return "domain_self_intersecting_ring"
+        outer = rings[0]
+        for hole in rings[1:]:
+            for v in hole[:-1]:
+                if not (_on_boundary(v, outer) or _inside(v, outer)):
+                    return "domain_hole_not_contained"
+    return None
+
+
+def validate_scenario(scn: dict) -> str | None:
+    """Domain geometry checks (docs 05/08). Returns a rejection reason or None.
+    These supplement the JSON Schema and never guess a corrected polygon."""
+    if parse_utc(scn["window_start"]) >= parse_utc(scn["window_end"]):
+        return "domain_window_unordered"
+    total = len(scn.get("population_points", [])) + len(scn.get("asset_points", []))
+    if total > _MAX_POINTS:
+        return "domain_point_budget_exceeded"
+    return _validate_geometry(scn["footprint"])
+
+
 def _dedup(records: list[dict], id_key: str) -> list[dict]:
     """Deduplicate identical ids; reject conflicting duplicate bodies (doc 08)."""
     seen: dict[str, dict] = {}
@@ -81,6 +139,10 @@ def _dedup(records: list[dict], id_key: str) -> list[dict]:
 
 
 def evaluate(scn: dict) -> dict:
+    reason = validate_scenario(scn)
+    if reason:
+        return {"status": "rejected", "reason": reason}
+
     footprint = scn["footprint"]
     pop = _dedup(scn.get("population_points", []), "sample_id")
     assets = _dedup(scn.get("asset_points", []), "asset_id")
