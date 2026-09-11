@@ -1,0 +1,12 @@
+.env
+.env.local
+.vercel
+__pycache__/
+*.pyc
+.pytest_cache/
+# web build output
+apps/web/.next/
+apps/web/out/
+node_modules/
+# native build artifacts (the tested wheel in vendor/wheels/ IS committed, doc 14)
+target/

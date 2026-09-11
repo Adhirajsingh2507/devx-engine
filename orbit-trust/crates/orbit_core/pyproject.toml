@@ -1,0 +1,18 @@
+# Build the native extension with maturin (docs 04/14). Not built locally in
+# this session: no Rust toolchain present. Build recipe (M0 exit evidence):
+#   pip install maturin
+#   maturin build --release --interpreter python3.12   # manylinux in CI
+#   record wheel sha256 + Rust/target/ABI in ../../vendor/wheels/build-manifest.json
+[build-system]
+requires = ["maturin>=1.7,<2.0"]
+build-backend = "maturin"
+
+[project]
+name = "orbit-core"
+version = "0.0.0"
+requires-python = ">=3.12"
+description = "Deterministic short-linear-encounter math and pair batches (PyO3)."
+
+[tool.maturin]
+# cdylib module `orbit_core`; abi3 wheel is portable across 3.12+.
+module-name = "orbit_core"

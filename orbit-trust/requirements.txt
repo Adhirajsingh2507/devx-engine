@@ -1,0 +1,11 @@
+# Runtime deps for the FastAPI Python Function. Exact patch versions are pinned
+# at M0 close after the deployment/wheel/ADK spikes (doc 02 change-control).
+# EXCLUDE compromised litellm 1.82.7 / 1.82.8 (doc 09).
+fastapi
+uvicorn
+pydantic
+numpy
+scipy
+jsonschema
+# supabase / google-adk / litellm / groq added when M1/M5 land and creds exist.
+# orbit-core wheel installed from vendor/wheels/ during dependency install (doc 14).

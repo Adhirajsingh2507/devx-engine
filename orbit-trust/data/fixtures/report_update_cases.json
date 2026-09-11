@@ -1,0 +1,48 @@
+{
+  "fixture_version": "2.0",
+  "base_report_fixture": "encounter_reference.json#sigma-50",
+  "cases": [
+    {
+      "id": "identical-retry",
+      "source_revision": "r1",
+      "raw_digest_relation": "same",
+      "created_order": "same",
+      "expected": "deduplicate_no_scientific_revision"
+    },
+    {
+      "id": "out-of-order",
+      "source_revision": "r0",
+      "raw_digest_relation": "different",
+      "created_order": "older",
+      "expected": "preserve_history_do_not_replace_current_source"
+    },
+    {
+      "id": "conflicting-source-body",
+      "source_revision": "r1",
+      "raw_digest_relation": "different",
+      "created_order": "same",
+      "expected": "retain_both_mark_source_conflict"
+    },
+    {
+      "id": "event-pair-conflict",
+      "same_event_key": true,
+      "object_pair": [
+        "A",
+        "C"
+      ],
+      "expected": "reject_association"
+    },
+    {
+      "id": "stale-agent",
+      "started_assessment": "asmt-1",
+      "current_assessment": "asmt-2",
+      "expected": "save_stale_trace_no_current_packet"
+    },
+    {
+      "id": "material-reopens",
+      "previous_workflow": "closed",
+      "new_material_input": true,
+      "expected": "reviewing_latest_ack_required"
+    }
+  ]
+}

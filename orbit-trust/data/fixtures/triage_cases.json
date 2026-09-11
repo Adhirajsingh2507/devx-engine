@@ -1,0 +1,77 @@
+{
+  "fixture_version": "2.0",
+  "policy_version": "demo-2.0",
+  "immediate_slack_s": 3600,
+  "cases": [
+    {
+      "id": "40-minutes",
+      "now": "2026-09-11T12:20:00Z",
+      "review_deadline": "2026-09-11T13:00:00Z",
+      "review_required": true,
+      "evidence_state": "usable",
+      "stable_declared_scenarios": true,
+      "expected_proposed_urgency": "P1"
+    },
+    {
+      "id": "two-hours",
+      "now": "2026-09-11T11:00:00Z",
+      "review_deadline": "2026-09-11T13:00:00Z",
+      "review_required": true,
+      "evidence_state": "usable",
+      "stable_declared_scenarios": true,
+      "expected_proposed_urgency": "P2"
+    },
+    {
+      "id": "unknown-deadline",
+      "now": "2026-09-11T12:20:00Z",
+      "review_deadline": null,
+      "review_required": true,
+      "evidence_state": "incomplete",
+      "stable_declared_scenarios": true,
+      "expected_proposed_urgency": "P1"
+    },
+    {
+      "id": "exact-deadline",
+      "now": "2026-09-11T13:00:00Z",
+      "review_deadline": "2026-09-11T13:00:00Z",
+      "review_required": true,
+      "evidence_state": "usable",
+      "stable_declared_scenarios": true,
+      "expected_proposed_urgency": "P1"
+    },
+    {
+      "id": "past-deadline",
+      "now": "2026-09-11T13:00:01Z",
+      "review_deadline": "2026-09-11T13:00:00Z",
+      "review_required": true,
+      "evidence_state": "usable",
+      "stable_declared_scenarios": true,
+      "expected_proposed_urgency": "P0"
+    },
+    {
+      "id": "monitor",
+      "now": "2026-09-11T12:20:00Z",
+      "review_deadline": null,
+      "review_required": false,
+      "evidence_state": "usable",
+      "stable_declared_scenarios": true,
+      "expected_proposed_urgency": "P3"
+    }
+  ],
+  "acknowledgement_cases": [
+    {
+      "id": "no-silent-downgrade",
+      "previous_unacknowledged_floor": "P1",
+      "new_proposed_urgency": "P3",
+      "latest_assessment_acknowledged": false,
+      "expected_effective_urgency": "P1"
+    },
+    {
+      "id": "acknowledged-downgrade",
+      "previous_unacknowledged_floor": "P1",
+      "new_proposed_urgency": "P3",
+      "latest_assessment_acknowledged": true,
+      "expected_effective_urgency": "P3"
+    }
+  ]
+}
