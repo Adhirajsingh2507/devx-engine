@@ -1,0 +1,17 @@
+lockfileVersion: '9.0'
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
+importers:
+
+  .: {}
+
+  packages/math: {}
+
+  packages/physics:
+    dependencies:
+      '@engine/math':
+        specifier: workspace:*
+        version: link:../math

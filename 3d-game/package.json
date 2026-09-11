@@ -1,0 +1,12 @@
+{
+  "name": "3d-game",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Reusable 3D game-engine ecosystem (math → physics → ECS → engine) shared across browser client and Node server.",
+  "type": "module",
+  "scripts": {
+    "test": "node --test --experimental-strip-types packages/*/test/*.test.ts",
+    "typecheck": "tsc --build"
+  },
+  "packageManager": "pnpm@9.15.0"
+}
