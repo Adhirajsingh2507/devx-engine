@@ -1,0 +1,40 @@
+{
+  "version": 1,
+  "project": {
+    "name": "orbit-trust",
+    "productType": "mission operations decision-support console",
+    "stack": ["Next.js", "React", "TypeScript", "CSS", "Canvas", "3d-game math core"]
+  },
+  "sources": {
+    "tokens": ["apps/web/app/globals.css"],
+    "components": ["apps/web/src/components/mission-console.tsx", "apps/web/src/components/orbit-scene.tsx"],
+    "assets": ["apps/web/src/engine/uv-sphere.ts (adapted from ../3d-game/apps/client/src/sphere.ts)", "../3d-game/packages/math"],
+    "instructions": ["specification/10_INTERFACE_AND_DESIGN.md", "specification/03_REPOSITORY_REUSE.md"]
+  },
+  "design": {
+    "colorMode": "light workspace with dark navigation",
+    "colors": { "navigation": "#101827", "canvas": "#F3F5F7", "panel": "#FFFFFF", "text": "#111827", "primary": "#1D4ED8", "danger": "#B42338", "warning": "#A45B05", "successCheckOnly": "#157347" },
+    "typography": { "family": "system sans-serif", "body": "15px", "dense": "11-14px", "title": "24-29px" },
+    "spacing": { "base": "8px", "page": "24px" },
+    "radius": { "panel": "8px", "control": "6px" },
+    "shadows": { "panel": "minimal 1px elevation" },
+    "motion": { "default": "subtle", "reducedMotion": "static" },
+    "density": "compact operational"
+  },
+  "components": {
+    "installed": [],
+    "preferredPrimitives": ["semantic tables", "native controls", "SVG icons", "Canvas evidence visualization"],
+    "patterns": ["fixed operational sidebar", "alert queue", "evidence-first case", "pair comparison matrix", "separate reentry sandbox"]
+  },
+  "constraints": {
+    "must": ["urgency uses text and icon as well as color", "all screens remain usable at 390px", "synthetic data is always labelled", "evidence and urgency remain separate", "3d-game source remains preserved"],
+    "avoid": ["animated starfield", "full-screen globe", "decorative gradients", "glass panels", "safety claims", "confidence based on agent agreement"]
+  },
+  "decisions": [
+    { "date": "2026-09-12", "choice": "Clean mission console", "reason": "Owner-selected direction: dark navigation, light work panels, restrained status colors." },
+    { "date": "2026-09-12", "choice": "Evidence visualization is contextual", "reason": "The orbit scene supports case comprehension and does not replace evidence, tables, or analyst action." },
+    { "date": "2026-09-12", "choice": "Reuse engine through adapters", "reason": "The ORBIT-TRUST app imports stable math and model primitives while preserving the 3d-game project as an independent future asset." }
+  ],
+  "evidence": ["specification/10_INTERFACE_AND_DESIGN.md", "specification/fixtures/triage_cases.json", "specification/fixtures/fleet_candidates.json"],
+  "generatedAt": "2026-09-12T00:00:00+05:30"
+}

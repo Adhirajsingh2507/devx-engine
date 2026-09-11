@@ -1,0 +1,12 @@
+{
+  "name": "orbit-trust",
+  "version": "0.1.0",
+  "private": true,
+  "packageManager": "pnpm@11.19.0",
+  "scripts": {
+    "dev": "pnpm --filter @orbit-trust/web dev",
+    "build": "pnpm --filter @orbit-trust/web build",
+    "typecheck": "pnpm --filter @orbit-trust/web typecheck",
+    "check": "pnpm typecheck && pnpm build"
+  }
+}
