@@ -1,19 +1,19 @@
-# Runtime deps for the FastAPI Python Function. Exact patch versions are pinned
-# at M0 close after the deployment/wheel/ADK spikes (doc 02 change-control).
-# EXCLUDE compromised litellm 1.82.7 / 1.82.8 (doc 09).
+# Runtime deps for the deployed FastAPI Vercel Function — kept lean so the
+# serverless bundle stays under the size limit. This is exactly what app.py +
+# orbit_trust/ import at runtime on the deterministic path.
 fastapi
 uvicorn
 pydantic
 numpy
 scipy
 jsonschema
-# N3 bounded ADK/Groq agent (doc 09). Pinned, tested on Python 3.12.
-# litellm 1.100.1 is well past the compromised 1.82.7/1.82.8 — do NOT downgrade into that range.
-google-adk==2.9.0
-litellm==1.100.1
-groq==1.7.0
-# supabase added when M1 lands and creds exist.
-# orbit-core Rust wheel (doc 14): installed at build so `import orbit_core`
-# succeeds on Vercel (the numerics engine). abi3/cp312 wheel -> the Vercel
-# Python runtime MUST be 3.12. Rebuild + rehash + update this path on any change.
-./vendor/wheels/orbit_core-0.0.0-cp312-abi3-manylinux_2_34_x86_64.whl
+#
+# NOT installed on Vercel (by design):
+# - google-adk / litellm / groq : the N3 live agent stack (heavy; blows the
+#   function-size limit). ADK/LiteLLM are imported lazily inside investigator.py,
+#   so with GROQ disabled the app runs the deterministic fallback without them.
+#   Install locally for the live agent: pip install -r requirements-agent.txt
+# - orbit_core wheel (vendor/wheels/*.whl) : the Rust numerics core. The
+#   manylinux_2_34 wheel does not load on Vercel's runtime, and api.py guards the
+#   import — prod falls back to the pure-Python reference oracle (numerics.py).
+#   Install locally for the Rust path (see docs/SETUP.md).
