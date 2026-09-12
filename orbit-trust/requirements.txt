@@ -1,0 +1,19 @@
+# Runtime deps for the FastAPI Python Function. Exact patch versions are pinned
+# at M0 close after the deployment/wheel/ADK spikes (doc 02 change-control).
+# EXCLUDE compromised litellm 1.82.7 / 1.82.8 (doc 09).
+fastapi
+uvicorn
+pydantic
+numpy
+scipy
+jsonschema
+# N3 bounded ADK/Groq agent (doc 09). Pinned, tested on Python 3.12.
+# litellm 1.100.1 is well past the compromised 1.82.7/1.82.8 — do NOT downgrade into that range.
+google-adk==2.9.0
+litellm==1.100.1
+groq==1.7.0
+# supabase added when M1 lands and creds exist.
+# orbit-core Rust wheel (doc 14): installed at build so `import orbit_core`
+# succeeds on Vercel (the numerics engine). abi3/cp312 wheel -> the Vercel
+# Python runtime MUST be 3.12. Rebuild + rehash + update this path on any change.
+./vendor/wheels/orbit_core-0.0.0-cp312-abi3-manylinux_2_34_x86_64.whl

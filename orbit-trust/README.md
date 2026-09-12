@@ -1,11 +1,40 @@
 # ORBIT-TRUST
 
-ORBIT-TRUST is the planned satellite conjunction-warning reliability, evidence-audit and fleet-response decision-support application. The complete, implementation-ready handoff is in [`specification/START_HERE.md`](specification/START_HERE.md).
+Evidence-and-response review workspace for satellite conjunction analysts.
+Deterministic core (Rust/Python) is authoritative; bounded ADK/Groq agents only
+select evidence and pick templates. Synthetic-data hackathon demo.
 
-The current contents are specifications and reference fixtures. The application has not yet been implemented. Start with `specification/00_BOOTSTRAP_PROMPT.md`, then follow the milestones in `specification/13_IMPLEMENTATION_MILESTONES.md`.
+Full specification: the in-repo [`specification/`](specification/START_HERE.md)
+handoff (docs 00-19). This directory is the implementation, scoped entirely to
+`orbit-trust/` and built alongside — never touching — the `3d-game/` app.
 
-## Repository boundary
+## Layout (doc 04)
+```
+app.py               FastAPI Vercel entrypoint (exports the instance)
+orbit_trust/         Python API, numerics, domain, persistence, policy, ADK
+  api.py             FastAPI surface: liveness, compute cores, workspace core loop
+  service.py         workspace domain ops (import/queue/assess/actions/investigate)
+  store.py           in-memory workspace store (Supabase-backed store swaps in here)
+  agent.py           bounded investigate fallback (Groq/ADK slots behind investigate)
+  numerics.py        independent Pc reference oracle (doc 06/12)
+crates/orbit_core/   Rust + PyO3 production math core (built via maturin)
+contracts/           canonical JSON Schema (+ generated OpenAPI snapshot later)
+data/fixtures/       synthetic bundles and expected outputs
+tests/reference/     independent numerical checks (T01-T15)
+tests/e2e/           browser/workflow checks (later)
+supabase/migrations/ tables, RLS, grants, atomic RPCs
+vendor/wheels/       reproducible native wheel + build manifest
+deploy/              Vercel runbook / tested config
+docs/BUILD_STATUS.md live status; game-baseline.txt preservation record
+```
 
-Build ORBIT-TRUST inside this `orbit-trust/` directory. The existing `3d-game/` application is an important future implementation asset. Preserve its source, assets, dependencies, configuration, history and deployment. Do not delete, overwrite, rename, move or repurpose it while implementing ORBIT-TRUST.
+## Run locally (what works now)
+```bash
+cd orbit-trust
+python3 tests/reference/test_numerics.py          # numerical oracle self-check
+python3 -m uvicorn app:app --reload               # API: /api/v1/health, /api/v1/capabilities
+```
 
-If the connected Vercel project currently deploys `3d-game/`, preserve that deployment and establish the intended ORBIT-TRUST deployment target before changing project settings.
+## Status
+See `docs/BUILD_STATUS.md`. M0 scaffold: reference oracle + FastAPI health run;
+Rust wheel, Supabase and Groq spikes are BLOCKED on toolchain/credentials.
