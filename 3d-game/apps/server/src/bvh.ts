@@ -151,6 +151,20 @@ export class BVH {
     return this.traverse(ray, 0, maxT);
   }
 
+  /** Independent packed copy for the browser's triangle ray tracer.
+   * Three RGBA texels per node: min/start, max/count, left/right.
+   * Triangle IDs refer to the caller's matIndex, preserving UV lookup after sorting.
+   */
+  toTextureData(): { nodes: Float32Array; triangleIds: number[] } {
+    const nodes = new Float32Array(this.nodes.length * 12);
+    this.nodes.forEach((n, i) => nodes.set([
+      n.aabb.min.x, n.aabb.min.y, n.aabb.min.z, n.start,
+      n.aabb.max.x, n.aabb.max.y, n.aabb.max.z, n.count,
+      n.left, n.right, 0, 0,
+    ], i * 12));
+    return { nodes, triangleIds: this.tris.map((t) => t.matIndex) };
+  }
+
   private traverse(ray: Ray, nodeIdx: number, maxT: number): BVHHit | null {
     const node = this.nodes[nodeIdx];
     if (!rayHitsAabb(ray, node.aabb)) return null;

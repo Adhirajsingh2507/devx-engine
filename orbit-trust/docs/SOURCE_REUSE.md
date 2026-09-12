@@ -1,6 +1,6 @@
 # Source reuse record
 
-This implementation keeps `3d-game/` as an independent, important future project and consumes selected primitives through a narrow frontend adapter. No source file inside `3d-game/` is modified.
+This implementation keeps `3d-game/` as an independent, important future project. The Earth milestone adds a browser Earth renderer under its client and a packed-BVH export in its server library; GARUDA and the game remain intact. The table below records the initial console milestone; current Earth reuse is documented in [FRONTEND_EXPERIENCE_V2.md](FRONTEND_EXPERIENCE_V2.md).
 
 | Source | Original path | Reused now | Boundary |
 | --- | --- | --- | --- |

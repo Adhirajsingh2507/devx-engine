@@ -1,0 +1,19 @@
+# Runtime deps for the deployed FastAPI Vercel Function — kept lean so the
+# serverless bundle stays under the size limit. This is exactly what app.py +
+# orbit_trust/ import at runtime on the deterministic path.
+fastapi
+uvicorn
+pydantic
+numpy
+scipy
+jsonschema
+#
+# NOT installed on Vercel (by design):
+# - google-adk / litellm / groq : the N3 live agent stack (heavy; blows the
+#   function-size limit). ADK/LiteLLM are imported lazily inside investigator.py,
+#   so with GROQ disabled the app runs the deterministic fallback without them.
+#   Install locally for the live agent: pip install -r requirements-agent.txt
+# - orbit_core wheel (vendor/wheels/*.whl) : the Rust numerics core. The
+#   manylinux_2_34 wheel does not load on Vercel's runtime, and api.py guards the
+#   import — prod falls back to the pure-Python reference oracle (numerics.py).
+#   Install locally for the Rust path (see docs/SETUP.md).

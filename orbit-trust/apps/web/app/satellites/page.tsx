@@ -1,5 +1,5 @@
-import { MissionConsole } from "../../src/components/mission-console";
+import { LandingDestination } from "../../src/components/landing-destination";
 
 export default function SatellitesPage() {
-  return <MissionConsole view="satellites" />;
+  return <LandingDestination section="satellite-directory" label="Satellites" />;
 }

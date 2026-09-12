@@ -1,0 +1,52 @@
+{
+  "generation_mode": "groq",
+  "selection": {
+    "assessment_id": "asmt-sigma-200",
+    "ordered_finding_ids": [
+      "RISK_THRESHOLD_EXCEEDED"
+    ],
+    "selected_fact_ids": [
+      "RISK_THRESHOLD_EXCEEDED"
+    ],
+    "summary_template_code": "REVIEW_DUE_TO_RISK",
+    "request_template_code": null,
+    "question_to_analyst_code": null
+  },
+  "authoritative_text": "Recomputed/reported collision probability exceeds the review threshold; review required.",
+  "trace": {
+    "model": "groq/openai/gpt-oss-20b",
+    "tool_calls": [
+      {
+        "name": "get_assessment_summary",
+        "args": {}
+      },
+      {
+        "name": "list_findings",
+        "args": {}
+      },
+      {
+        "name": "get_finding",
+        "args": {
+          "code": "RISK_THRESHOLD_EXCEEDED"
+        }
+      }
+    ],
+    "source_ids": [
+      "RISK_THRESHOLD_EXCEEDED"
+    ],
+    "stages": {
+      "investigator": {
+        "duration_ms": 4067,
+        "tokens": 2120,
+        "note": "The assessment has a **P1 urgency** because the recomputed probability of close approach (PC\u202f\u2248\u202f0.0011) exceeds the critical threshold of 0.0001, as indicated by the material finding **RISK_THRESHOLD_EXCEEDED**. This high\u2011risk level, combined with the imminent deadline of 2026\u201109\u201111\u202f13:00\u202fZ, drives the urgent need for review and potential collision mitigation actions."
+      },
+      "formatter": {
+        "duration_ms": 1022,
+        "tokens": 951
+      }
+    },
+    "total_tokens": 3071,
+    "provider_calls": 5
+  },
+  "retries": 0
+}

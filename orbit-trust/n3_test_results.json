@@ -1,0 +1,131 @@
+{
+  "live_enabled": true,
+  "results": [
+    {
+      "test": "T34_investigate_host_owned",
+      "mode": "LIVE_GROQ",
+      "status": "PASS",
+      "detail": "summary=REVIEW_DUE_TO_RISK reason=-"
+    },
+    {
+      "test": "T35_invented_finding",
+      "mode": "DETERMINISTIC_FALLBACK",
+      "status": "PASS",
+      "detail": "invalid:cited_unknown_finding"
+    },
+    {
+      "test": "T35_omitted_required",
+      "mode": "DETERMINISTIC_FALLBACK",
+      "status": "PASS",
+      "detail": "invalid:required_finding_omitted"
+    },
+    {
+      "test": "T35_wrong_template",
+      "mode": "DETERMINISTIC_FALLBACK",
+      "status": "PASS",
+      "detail": "invalid:summary_template_not_supported_by_facts"
+    },
+    {
+      "test": "T35_schema_extra",
+      "mode": "DETERMINISTIC_FALLBACK",
+      "status": "PASS",
+      "detail": "malformed:schema"
+    },
+    {
+      "test": "T35_forbidden_tool_denied",
+      "mode": "DETERMINISTIC_FALLBACK",
+      "status": "PASS",
+      "detail": "allowlist=('get_assessment_summary', 'list_findings', 'get_finding')"
+    },
+    {
+      "test": "T36_injection_is_data",
+      "mode": "LIVE_GROQ",
+      "status": "PASS",
+      "detail": "injection_flagged=True summary=REVIEW_DUE_TO_RISK"
+    },
+    {
+      "test": "T37_fallback_timeout",
+      "mode": "DETERMINISTIC_FALLBACK",
+      "status": "PASS",
+      "detail": "timeout"
+    },
+    {
+      "test": "T37_fallback_rate_limited",
+      "mode": "DETERMINISTIC_FALLBACK",
+      "status": "PASS",
+      "detail": "rate_limited"
+    },
+    {
+      "test": "T37_fallback_malformed",
+      "mode": "DETERMINISTIC_FALLBACK",
+      "status": "PASS",
+      "detail": "malformed:bad_json"
+    },
+    {
+      "test": "T37_fallback_quota",
+      "mode": "DETERMINISTIC_FALLBACK",
+      "status": "PASS",
+      "detail": "quota:global_daily_token_cap"
+    },
+    {
+      "test": "T37_fallback_disabled",
+      "mode": "DETERMINISTIC_FALLBACK",
+      "status": "PASS",
+      "detail": "groq_disabled_or_no_key"
+    }
+  ],
+  "live_trace": {
+    "live_attempted": true,
+    "generation_mode": "groq",
+    "summary_template_code": "REVIEW_DUE_TO_RISK",
+    "authoritative_text": "Recomputed/reported collision probability exceeds the review threshold; review required.",
+    "selection": {
+      "assessment_id": "asmt-sigma-200",
+      "ordered_finding_ids": [
+        "RISK_THRESHOLD_EXCEEDED"
+      ],
+      "selected_fact_ids": [
+        "RISK_THRESHOLD_EXCEEDED"
+      ],
+      "summary_template_code": "REVIEW_DUE_TO_RISK",
+      "request_template_code": null,
+      "question_to_analyst_code": null
+    },
+    "retries": 0,
+    "trace": {
+      "model": "groq/openai/gpt-oss-20b",
+      "tool_calls": [
+        {
+          "name": "get_assessment_summary",
+          "args": {}
+        },
+        {
+          "name": "list_findings",
+          "args": {}
+        },
+        {
+          "name": "get_finding",
+          "args": {
+            "code": "RISK_THRESHOLD_EXCEEDED"
+          }
+        }
+      ],
+      "source_ids": [
+        "RISK_THRESHOLD_EXCEEDED"
+      ],
+      "stages": {
+        "investigator": {
+          "duration_ms": 5233,
+          "tokens": 2184,
+          "note": "The assessment flags a **material risk** with a recomputed probability of collision (Pc) of **0.0011**, far exceeding the 0.0001 threshold that triggers a risk\u2011exceeded alert. This high Pc, combined with the assessment\u2019s **P1 urgency** designation and a hard deadline of **September\u202f11,\u202f2026\u202f13:00\u202fZ**, drives the urgency to act immediately. The assessment is already marked \u201csupported\u201d and \u201cusable,\u201d so the decision is clear: a swift review and mitigation are required to prevent an unacceptable collision likelihood."
+        },
+        "formatter": {
+          "duration_ms": 1278,
+          "tokens": 1066
+        }
+      },
+      "total_tokens": 3250,
+      "provider_calls": 5
+    }
+  }
+}

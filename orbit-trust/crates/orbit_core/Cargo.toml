@@ -1,0 +1,19 @@
+[package]
+name = "orbit_core"
+version = "0.0.0"
+edition = "2021"
+description = "Deterministic short-linear-encounter math and pair batches (PyO3)."
+
+[lib]
+name = "orbit_core"
+crate-type = ["cdylib"]
+
+# ponytail: single pinned dep. Pin exact patch + record wheel/manifest hashes in
+# M0 (docs 04/14) before this is ever bundled for Vercel. abi3-py312 -> one wheel
+# per platform across 3.12+. Rayon for bounded pair batches lands in M3.
+[dependencies]
+pyo3 = { version = "0.22", features = ["extension-module", "abi3-py312"] }
+rayon = "1"
+
+[profile.release]
+lto = true

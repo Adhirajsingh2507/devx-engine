@@ -7,12 +7,12 @@ import { activityItems, evidenceChecks, fleetRows, reviewCases, type ReviewCase,
 export type ConsoleView = "overview" | "queue" | "case" | "fleet" | "satellites" | "reentry" | "activity" | "settings" | "about";
 
 const nav: Array<{ view: ConsoleView; href: string; label: string; icon: string }> = [
-  { view: "overview", href: "/", label: "Mission overview", icon: "grid" },
+  { view: "overview", href: "/#mission", label: "Mission overview", icon: "grid" },
   { view: "queue", href: "/queue/", label: "Review queue", icon: "queue" },
   { view: "fleet", href: "/fleet/", label: "Fleet response", icon: "orbit" },
-  { view: "satellites", href: "/satellites/", label: "Satellites", icon: "satellite" },
+  { view: "satellites", href: "/#satellite-directory", label: "Satellites", icon: "satellite" },
   { view: "reentry", href: "/reentry/", label: "Reentry sandbox", icon: "map" },
-  { view: "activity", href: "/activity/", label: "Activity", icon: "pulse" },
+  { view: "activity", href: "/#activity", label: "Activity", icon: "pulse" },
 ];
 
 const pageMeta: Record<ConsoleView, { eyebrow: string; title: string; description: string }> = {
@@ -156,7 +156,7 @@ function Overview() {
 }
 
 function QueueView() {
-  return <AppShell view="queue"><div className="notice-strip urgent"><span className="notice-icon">!</span><div><strong>Capacity threshold exceeded</strong><p>3 cases need review now; 2 analysts are currently available.</p></div><a href="/activity/">View activity <Icon name="arrow" size={15}/></a></div><div className="metrics-grid"><Metric label="P0 / P1" value="03" note="60% of active queue" tone="critical"/><Metric label="Incomplete evidence" value="02" note="1 missing deadline" tone="warn"/><Metric label="Unassigned" value="01" note="Immediate triage needed"/><Metric label="Median review slack" value="2h 08m" note="Active cases only"/></div><QueueTable/></AppShell>;
+  return <AppShell view="queue"><div className="notice-strip urgent"><span className="notice-icon">!</span><div><strong>Capacity threshold exceeded</strong><p>3 cases need review now; 2 analysts are currently available.</p></div><a href="/#activity">View activity <Icon name="arrow" size={15}/></a></div><div className="metrics-grid"><Metric label="P0 / P1" value="03" note="60% of active queue" tone="critical"/><Metric label="Incomplete evidence" value="02" note="1 missing deadline" tone="warn"/><Metric label="Unassigned" value="01" note="Immediate triage needed"/><Metric label="Median review slack" value="2h 08m" note="Active cases only"/></div><QueueTable/></AppShell>;
 }
 
 function CaseView() {
@@ -167,7 +167,7 @@ function CaseView() {
       <section className="panel attention-panel"><div className="attention-copy"><p>WHY THIS NEEDS ATTENTION</p><h2>Current risk is material, but the evidence is not yet strong enough for a defensible response decision.</h2><div className="reason-list"><span><i>1</i>Reported collision probability exceeds demo policy.</span><span><i>2</i>Primary covariance is older than the accepted evidence window.</span><span><i>3</i>Secondary-object maneuver status is missing.</span></div></div><div className="attention-action"><small>RECOMMENDED NEXT STEP</small><strong>Request updated covariance and maneuver context</strong><button className="button primary">Draft information request</button></div></section>
       <div className="tabs" role="tablist" aria-label="Case sections">{["Evidence","Reports","Response comparison","Economics","Activity"].map((item) => <button key={item} role="tab" aria-selected={tab===item} className={tab===item?"active":""} onClick={() => setTab(item)}>{item}</button>)}</div>
       {tab === "Evidence" ? <div className="evidence-grid"><section className="panel"><div className="panel-header split"><div><h2>Evidence audit</h2><p>Assessment asmt-r18 · policy demo-2.0</p></div><StatusPill tone="warning">2 ACTIONS NEEDED</StatusPill></div><div className="check-list">{evidenceChecks.map((check) => <div className={`check-item ${check.state}`} key={check.label}><span className="check-symbol">{check.state === "pass" ? "✓" : check.state === "fail" ? "×" : "!"}</span><div><strong>{check.label}</strong><p>{check.detail}</p></div><button aria-label={`Expand ${check.label}`}>⌄</button></div>)}</div></section><section className="panel"><div className="panel-header"><h2>Encounter geometry</h2><p>Mean position and supplied uncertainty</p></div><OrbitScene/></section></div> : <section className="panel placeholder-panel"><span>{tab.slice(0,1)}</span><h2>{tab}</h2><p>This foundation preserves the final information architecture. Data wiring for this panel follows its versioned contract in the implementation handoff.</p><button className="button secondary">View contract</button></section>}
-    </div><aside className="case-side"><section className="panel side-card"><h3>Case control</h3><label>Assigned analyst<select defaultValue="A. Rao"><option>A. Rao</option><option>M. Chen</option><option>S. Iyer</option></select></label><label>Review stage<select defaultValue="Review now"><option>Review now</option><option>Evidence check</option><option>Analysis ready</option></select></label><label>Operator note<textarea placeholder="Add an evidence-linked note…"/></label><button className="button secondary full">Save note</button></section><section className="panel source-card"><h3>Assessment record</h3><dl><div><dt>Method</dt><dd>linear-gaussian-2d</dd></div><div><dt>Input revision</dt><dd>r18</dd></div><div><dt>Calculated</dt><dd>09:50:42 IST</dd></div><div><dt>Runtime</dt><dd>18 ms</dd></div></dl><a href="/activity/">View provenance <Icon name="arrow" size={14}/></a></section></aside></div>
+    </div><aside className="case-side"><section className="panel side-card"><h3>Case control</h3><label>Assigned analyst<select defaultValue="A. Rao"><option>A. Rao</option><option>M. Chen</option><option>S. Iyer</option></select></label><label>Review stage<select defaultValue="Review now"><option>Review now</option><option>Evidence check</option><option>Analysis ready</option></select></label><label>Operator note<textarea placeholder="Add an evidence-linked note…"/></label><button className="button secondary full">Save note</button></section><section className="panel source-card"><h3>Assessment record</h3><dl><div><dt>Method</dt><dd>linear-gaussian-2d</dd></div><div><dt>Input revision</dt><dd>r18</dd></div><div><dt>Calculated</dt><dd>09:50:42 IST</dd></div><div><dt>Runtime</dt><dd>18 ms</dd></div></dl><a href="/#activity">View provenance <Icon name="arrow" size={14}/></a></section></aside></div>
   </AppShell>;
 }
 

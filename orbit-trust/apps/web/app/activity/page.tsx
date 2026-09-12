@@ -1,5 +1,5 @@
-import { MissionConsole } from "../../src/components/mission-console";
+import { LandingDestination } from "../../src/components/landing-destination";
 
 export default function ActivityPage() {
-  return <MissionConsole view="activity" />;
+  return <LandingDestination section="activity" label="Activity" />;
 }

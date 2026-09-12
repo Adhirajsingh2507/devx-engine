@@ -1,30 +1,24 @@
 # ORBIT-TRUST
 
-ORBIT-TRUST is the planned satellite conjunction-warning reliability, evidence-audit and fleet-response decision-support application. The complete, implementation-ready handoff is in [`specification/START_HERE.md`](specification/START_HERE.md).
+Evidence-first satellite conjunction review. The repository includes a Next.js mission workspace, the independent GARUDA/game engine, and the Rust/Python backend with Supabase migrations and a bounded ADK/Groq investigator.
 
-The repository now contains the first production UI foundation alongside the specifications and reference fixtures. Continue implementation from `specification/00_BOOTSTRAP_PROMPT.md` and the milestones in `specification/13_IMPLEMENTATION_MILESTONES.md`.
+## Frontend
 
-## UI implementation
+From `orbit-trust/apps/web`, run `npm run dev` for local development or `npm run build` for a static export. Dependencies must already be installed from the repository's pnpm lockfile. The public landing page leads to separate app pages under `/app/`: overview, satellites, orbital view, collision review, agents, finance, terrain, activity and methods.
 
-The Next.js application in `apps/web` includes the fixed static routes, mission-console design system, synthetic review queue, evidence-first case view, fleet response matrix, satellite registry, reentry exposure sandbox, activity ledger, settings and method boundaries.
+The interface currently uses explicitly marked local demonstration data. Backend services merged from main are preserved but are not silently represented as live connections. GARUDA and the shared ray-tracing engine remain intact in `3d-game/`.
 
-```bash
-cd orbit-trust
-pnpm install
-pnpm dev
-```
+## Backend
 
-Run `pnpm check` before a release. The static export is written to `apps/web/out`. The encounter visual imports the preserved `3d-game` math package and adapts its procedural sphere model. See [`docs/SOURCE_REUSE.md`](docs/SOURCE_REUSE.md) for the scientific and repository boundaries and [`docs/BUILD_STATUS.md`](docs/BUILD_STATUS.md) for the remaining implementation work.
+From `orbit-trust`, the existing API command is `python -m uvicorn app:app --reload`. The entrypoint exports `orbit_trust.api.app`; health is `/api/v1/health`. Backend code is in `orbit_trust/`, native calculations in `crates/orbit_core/`, fixtures in `data/fixtures/`, and database migrations in `supabase/migrations/`.
 
-## Repository boundary
+`orbit-trust/vercel.json` retains the backend deployment configuration. The frontend is independently deployable from `orbit-trust/apps/web` with access to the sibling engine source. Do not repurpose the GARUDA Vercel project.
 
-`@engine/math` is linked directly to `../3d-game/packages/math` so engine additions
-such as `triangle.ts` are available immediately instead of depending on a copied
-package snapshot. Keep both folders in the checkout. After changing dependency
-links, run `pnpm install` from `orbit-trust/` and restart `pnpm dev`.
-Turbopack's root includes both folders, while `transpilePackages` compiles the
-shared TypeScript source.
+## Documentation
 
-Build ORBIT-TRUST inside this `orbit-trust/` directory. The existing `3d-game/` application is an important future implementation asset. Preserve its source, assets, dependencies, configuration, history and deployment. Do not delete, overwrite, rename, move or repurpose it while implementing ORBIT-TRUST.
+- `docs/BUILD_STATUS.md`: backend and frontend milestone records
+- `docs/FRONTEND_EXPERIENCE_V2.md`: prior Earth experience details
+- `docs/SETUP.md`: backend credentials and infrastructure setup
+- `specification/START_HERE.md`: full implementation handoff
 
-If the connected Vercel project currently deploys `3d-game/`, preserve that deployment and establish the intended ORBIT-TRUST deployment target before changing project settings.
+Secrets belong only in ignored environment files or deployment settings, never in the frontend bundle or Git history.

@@ -5,4 +5,8 @@ out/
 .env
 .env.local
 .vercel/
-
+__pycache__/
+*.pyc
+.pytest_cache/
+target/
+.venv*/

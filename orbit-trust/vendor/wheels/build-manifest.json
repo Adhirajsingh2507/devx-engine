@@ -1,0 +1,13 @@
+{
+  "package": "orbit_core",
+  "version": "0.0.0",
+  "wheel_file": "orbit_core-0.0.0-cp312-abi3-manylinux_2_34_x86_64.whl",
+  "wheel_sha256": "21b0162d54a21d5cd36304e3f1c44a428be596203fd582eb66b774eae6d39041",
+  "python_abi": "cp312-abi3",
+  "target": "x86_64-unknown-linux-gnu (manylinux_2_34)",
+  "rust_version": "rustc 1.98.1 (48a229cea 2026-09-01)",
+  "source_tree_digest": "b7939f47c202d1a343b7f292b44e4bf506b121cf37e9d6564802a71e6954536f",
+  "cargo_lock_sha256": "27a987b31ebb9702f7309e1d33841ed26b9b94e20cbc266dc45ddd706e977ea3",
+  "built_with": "maturin 1.15.0",
+  "note": "Tested wheel committed with matching source (doc 14). Rebuild + rehash on any source change before promotion. Validated against orbit_trust.numerics (tests/reference/test_rust_core.py)."
+}
