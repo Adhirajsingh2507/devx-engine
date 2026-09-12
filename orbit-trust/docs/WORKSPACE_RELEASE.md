@@ -24,7 +24,7 @@ The new frontend still uses local demonstration calculations. The newly merged b
 
 The frontend build root is `orbit-trust/apps/web`, with the existing `npm run build` command and Next.js static export (`out/`). Its source imports sibling engine code; Vercel must include files outside the root directory. Dependency installation must respect `orbit-trust/pnpm-lock.yaml` and the parent workspace, with no independent regenerated lockfile. Backend settings remain under `orbit-trust/`. Do not change the `physics-sandbox` / GARUDA project.
 
-GitHub records identify the connected frontend project as `devx-engine-web` under `techadhiraj07-1630s-projects`; production tracks main. Deployment success must be checked against the pushed commit, not a prior successful build.
+GitHub records show multiple projects under `techadhiraj07-1630s-projects`. Their names do not reliably identify their contents: the stable `devx-engine-web.vercel.app` domain was inspected after pushing and serves the game, not this frontend. Do not repurpose it. The generated deployment URL redirects unauthenticated users to Vercel login. The correct ORBIT-TRUST frontend project/root must be confirmed with the owner before changing project settings. A successful GitHub deployment status alone does not prove this interface is live.
 
 ## Validation performed
 
