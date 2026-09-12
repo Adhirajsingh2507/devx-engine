@@ -128,3 +128,38 @@ Vercel project, and the Rust toolchain + Python 3.12 are installed locally.
 3. Supabase project URL + keys — owner.
 4. Groq API key — owner.
 5. Dedicated ORBIT-TRUST Vercel project (Root Directory orbit-trust/) — owner.
+
+---
+
+# ORBIT-TRUST build status
+
+## Earth and mission experience — September 12, 2026
+
+- [x] Welcome sequence, scroll-controlled NASA mesh ray tracing and monochrome constellation.
+- [x] Move mission overview, activity and satellites to homepage chapters; preserve old bookmarks.
+- [x] Inspectable orchestrator with five branches and 19 proposed specialist nodes.
+- [x] Reproducible local scenario calculations, trace playback/export, financial what-if and review alert.
+- [x] Desktop/mobile, reduced-motion, pause/resume, filters, alert and bookmark checks with Playwright.
+- [x] Production static export and engine client typecheck.
+- [x] Four deterministic scenario tests covering horizon, invariance, invalid inputs and claim limits.
+
+See [implementation and validation notes](FRONTEND_EXPERIENCE_V2.md). Backend agent execution and live telemetry are not connected. The local demonstration now computes its encounter and financial fixture outputs; the earlier console still uses supplied snapshots.
+
+## UI foundation — in progress
+
+- [x] Preserve the `3d-game/` source and record its starting tree/configuration.
+- [x] Import the complete implementation handoff as the product and interaction source.
+- [x] Initialize durable 21st design context.
+- [x] Create fixed Next.js static routes for overview, queue, case, fleet, satellites, reentry, activity, settings and methods.
+- [x] Implement the owner-selected mission-console visual system and responsive navigation.
+- [x] Bind representative UI states to the synthetic fixture language and expected fleet comparison.
+- [x] Create an engine adapter using the preserved `Vec3` math primitive and procedural sphere model.
+- [x] Re-run the preserved engine validation: TypeScript typecheck and all 99 math, physics and server-renderer tests pass.
+- [ ] Connect canonical TypeScript contracts and validate fixtures at runtime.
+- [ ] Add Supabase session, persistence and mutation states.
+- [ ] Add FastAPI/Rust calculation endpoints and replace displayed reference values with recorded results.
+- [ ] Add bounded ADK/Groq investigation flow.
+- [x] Verify desktop and 390px responsive layouts in a real browser; no browser console errors or document-level horizontal overflow.
+- [ ] Complete keyboard/screen-reader audit and deployed-route evidence.
+
+The current screens are a high-fidelity functional design foundation. Values shown in them are synthetic demonstration data and are not live calculations. The 21st review reported informational hard-coded-color findings because the project tokens are defined as CSS custom properties; its only warning came from generated Next.js output rather than source.

@@ -100,8 +100,11 @@ Nothing the model emits reaches an accepted packet without passing
 ## Honest status
 
 This is a **backend + numerical core + bounded agent + deploy path**, verified end
-to end. The judge-facing web console is the next milestone and is **not built yet** —
-today the product is exercised through its API and its acceptance tests.
+to end, now fronted by a **Next.js mission workspace** in `apps/web`. The web
+console renders the review flow over **explicitly marked local demonstration data** —
+the merged backend services are preserved but are *not* silently presented as live
+connections. The product is still exercised authoritatively through its API and its
+acceptance tests.
 
 | Area | State | Evidence |
 | --- | --- | --- |
@@ -111,7 +114,7 @@ today the product is exercised through its API and its acceptance tests.
 | Bounded ADK ↔ Groq agent | ✅ live path + deterministic fallback | `N3_SPIKE_REPORT.md`, `docs/n3_live_trace.json` |
 | Supabase persistence | ⏳ migrations `0001–0007` applied & seeded on the live project; store swap is the remaining M1 work | `supabase/migrations/` |
 | Vercel deploy | ⏳ config tested; separate project + public URL pending owner setup | `vercel.json`, `deploy/` |
-| Web console (M6) | ❌ not started — API-first for now | — |
+| Web console (M6) | 🟡 Next.js workspace present; **demo data, explicitly labeled** — not wired to live backend yet | `apps/web/` |
 
 Full milestone/test detail: **`docs/BUILD_STATUS.md`** (PASS / FAIL / BLOCKED
 recorded honestly — synthetic fixtures are never reported as customer outcomes).
@@ -144,6 +147,20 @@ header; `POST /api/v1/workspaces/demo` creates a workspace, then import a bundle
 from `data/fixtures/` and walk the core loop (`test_service.py` is the reference
 sequence). Live agent runs need Groq/Supabase credentials — see **`docs/SETUP.md`**.
 
+### Web console
+
+```bash
+cd orbit-trust/apps/web
+npm run dev      # local development
+npm run build    # static export
+```
+
+Dependencies must already be installed from the repository's pnpm lockfile. The
+public landing page leads to separate app pages under `/app/`: overview, satellites,
+orbital view, collision review, agents, finance, terrain, activity and methods. The
+interface currently uses explicitly marked local demonstration data; GARUDA and the
+shared ray-tracing engine remain intact in `3d-game/`.
+
 ---
 
 ## Scope & honesty
@@ -160,6 +177,8 @@ The pitch is only as strong as what it refuses to claim.
   "save" a spacecraft's value; there is no guaranteed-savings claim.
 - **The reentry sandbox reports exposure under a supplied footprint.** It is not a
   predicted crash location and cannot change orbital queue priority.
+- **The web console shows demo data.** It is explicitly marked as local
+  demonstration data and does not silently stand in for a live backend connection.
 - **All data is synthetic** and persistently labeled as such.
 
 Language shown to users follows the same discipline: "Review now,"
@@ -172,14 +191,28 @@ confidence percentage.
 ## Tech
 
 Python 3.12 · FastAPI · Rust + PyO3 (maturin) · Google ADK + LiteLLM + Groq
-(bounded, optional) · Supabase (Postgres + RLS + atomic RPCs) · Vercel Python
-Functions.
+(bounded, optional) · Supabase (Postgres + RLS + atomic RPCs) · Next.js web
+console · Vercel (Python Functions for the backend; the frontend deploys
+independently from `apps/web`).
+
+`orbit-trust/vercel.json` retains the backend deployment configuration; the
+frontend is independently deployable from `apps/web` with access to the sibling
+engine source. Do not repurpose the GARUDA Vercel project.
 
 Prior-work reuse is disclosed in **`SOURCE_REUSE.md`** (terrasight, Finora, sajawat)
 — adapted patterns, not copied secrets or business logic. Full specification lives
-in `../main project/orbit_trust_handoff/` (docs 00–19); this directory is the
-implementation, scoped entirely to `orbit-trust/` and never touching the sibling
-`3d-game/` app.
+in `specification/START_HERE.md` and `../main project/orbit_trust_handoff/`
+(docs 00–19); this directory is the implementation, scoped to `orbit-trust/`.
+
+Secrets belong only in ignored environment files or deployment settings — never in
+the frontend bundle or Git history.
+
+## Docs
+
+- `docs/BUILD_STATUS.md` — live, honestly-recorded backend & frontend milestones
+- `docs/FRONTEND_EXPERIENCE_V2.md` — prior Earth experience details
+- `docs/SETUP.md` — backend credentials and infrastructure setup
+- `specification/START_HERE.md` — full implementation handoff
 
 ## Map
 
@@ -192,6 +225,7 @@ orbit_trust/           API, numerics, domain, policy, agent, persistence
   agent.py             bounded investigate() with host-validated fallback
   investigator.py      live ADK ↔ Groq two-stage workflow
   quota.py / sanitize.py  run/token budgets · injection & contact sanitization
+apps/web/              Next.js mission workspace (landing + /app/ pages, demo data)
 crates/orbit_core/     Rust + PyO3 numerical batch core (built via maturin)
 contracts/             canonical JSON Schema
 data/fixtures/         synthetic bundles + expected outputs

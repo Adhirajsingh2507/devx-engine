@@ -1,0 +1,131 @@
+{
+  "scope": "Document input schemas and reference fixtures only. Application not implemented.",
+  "checks": [
+    {
+      "check": "schema encounter_reference sigma-20",
+      "passed": true,
+      "details": []
+    },
+    {
+      "check": "schema encounter_reference sigma-50",
+      "passed": true,
+      "details": []
+    },
+    {
+      "check": "schema encounter_reference sigma-200",
+      "passed": true,
+      "details": []
+    },
+    {
+      "check": "schema encounter_reference sigma-1000",
+      "passed": true,
+      "details": []
+    },
+    {
+      "check": "schema fleet_candidates ",
+      "passed": true,
+      "details": []
+    },
+    {
+      "check": "schema economics ",
+      "passed": true,
+      "details": []
+    },
+    {
+      "check": "schema reentry ",
+      "passed": true,
+      "details": []
+    },
+    {
+      "check": "schema communications ",
+      "passed": true,
+      "details": []
+    },
+    {
+      "check": "valid agent selection schema",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "negative schema missing_frame",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "negative schema probability_above_one",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "independent ncx2 20.0",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "independent ncx2 50.0",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "independent ncx2 200.0",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "independent ncx2 1000.0",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "zero miss analytic",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "anisotropic independent Cartesian versus polar",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "schema anisotropic",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "schema zero-miss",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "decimal finance",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "reentry population fixture",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "reentry asset exposure",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "hole boundary convention",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "conditional damage arithmetic",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "fleet reversal",
+      "passed": true,
+      "details": null
+    }
+  ],
+  "passed_count": 25
+}

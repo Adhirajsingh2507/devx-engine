@@ -1,0 +1,523 @@
+---
+name: hackathon-business-model
+version: 1.0
+purpose: >
+  Help teams design hackathon projects with a strong, believable business model
+  without sacrificing technical depth, demoability, or judging impact.
+---
+
+# Hackathon Business Model Skill
+
+## Core Objective
+
+When designing a hackathon-winning project, do not treat the business model as a slide added at the end. The business model should reinforce the problem, product, target user, technical architecture, and demo.
+
+The goal is to produce a project that answers five questions clearly:
+
+1. **Who has the problem?**
+2. **Why is the problem painful or expensive enough to solve?**
+3. **What does our product do materially better than existing alternatives?**
+4. **Who pays, why do they pay, and how much could they plausibly pay?**
+5. **Why can this become a scalable product rather than just a hackathon demo?**
+
+---
+
+## 1. Start With the Business Problem, Not the Technology
+
+Do not begin with "What can we build with AI/blockchain/IoT?"
+
+Begin with:
+
+- A specific user segment.
+- A recurring, expensive, risky, slow, or frustrating problem.
+- The current workaround.
+- Why the workaround fails.
+- The measurable value created by solving it.
+
+### Preferred problem characteristics
+
+Prioritize problems with at least one of these properties:
+
+- Save meaningful time.
+- Reduce operational cost.
+- Increase revenue/conversion.
+- Reduce risk, errors, fraud, or downtime.
+- Improve access to an important service.
+- Automate work previously requiring skilled labor.
+- Create better decisions from existing data.
+
+### Avoid
+
+- Generic "AI assistant" ideas with no painful use case.
+- Problems that are interesting but economically irrelevant.
+- Products whose only value is novelty.
+- A target market described as "everyone."
+
+---
+
+## 2. Define the Ideal Customer Profile (ICP)
+
+A strong business model names a narrow first customer.
+
+Document:
+
+- **Primary user:** person interacting with the product.
+- **Economic buyer:** person/company paying.
+- **Beneficiary:** person receiving the value.
+- **First market:** the easiest segment to acquire and validate.
+- **Expansion market:** the logical next segment.
+
+Example structure:
+
+> Primary user: hospital operations manager
+> Economic buyer: hospital administrator
+> Beneficiary: clinicians and patients
+> Beachhead market: mid-sized private hospitals
+> Expansion: hospital chains and diagnostic networks
+
+Do not claim a huge TAM unless the initial beachhead is convincing.
+
+---
+
+## 3. Quantify the Pain
+
+Convert the problem into money, time, volume, or risk.
+
+Use a simple value equation where possible:
+
+**Annual Customer Value = Frequency × Units Affected × Cost per Unit × Improvement %**
+
+Examples:
+
+- Hours saved per employee × hourly labor cost.
+- Leads recovered × conversion rate × average deal value.
+- Downtime reduced × revenue/hour.
+- Errors prevented × cost/error.
+
+The business case is stronger when the value can be expressed numerically.
+
+---
+
+## 4. Build the Value Proposition
+
+Use this template:
+
+> For **[specific customer]** who struggle with **[specific problem]**, our **[product]** provides **[measurable outcome]** by **[key mechanism]**, unlike **[current alternative]**, which **[important weakness]**.
+
+The value proposition should be short enough to say in one breath.
+
+### Strong value propositions emphasize
+
+- Outcome before features.
+- Specific customer before general market.
+- Measurable improvement before vague claims.
+- Differentiation before technology buzzwords.
+
+---
+
+## 5. Choose the Right Revenue Model
+
+Select a revenue model that naturally matches how customers receive value.
+
+### Common models
+
+**Subscription / SaaS**
+- Monthly or annual fee.
+- Best when value is recurring.
+
+**Usage-based**
+- Pay per API call, document, transaction, seat-hour, inference, etc.
+- Best when customer value scales with usage.
+
+**Transaction fee**
+- Percentage or fixed fee per transaction.
+- Best for marketplaces, fintech, commerce, platforms.
+
+**Per-seat licensing**
+- Price per user or employee.
+- Best for team software.
+
+**Enterprise contract**
+- Annual contract with onboarding/support.
+- Best for B2B operational software.
+
+**Freemium → paid conversion**
+- Useful when product-led adoption is realistic.
+
+**Marketplace take rate**
+- Revenue as a percentage of marketplace GMV.
+
+**Hardware + recurring software**
+- Upfront hardware plus subscription/service revenue.
+
+Do not list five revenue models just to sound sophisticated. Pick the primary model and at most one secondary model.
+
+---
+
+## 6. Pricing Logic
+
+Pricing should be connected to customer value, not arbitrary numbers.
+
+Use one of these approaches:
+
+### Value-based pricing
+
+Price as a fraction of the economic value created.
+
+Example:
+
+> If the product creates ₹1,00,000/month in measurable value, a ₹10,000–₹20,000/month price can be defendable depending on alternatives and switching friction.
+
+### Cost-plus pricing
+
+Useful for commodity-like services or early hardware concepts, but usually weaker for software.
+
+### Competitive pricing
+
+Anchor against existing alternatives.
+
+For a hackathon, present:
+
+- Proposed price.
+- What the customer gets.
+- Approximate ROI/payback period.
+
+A strong slide answers:
+
+> **"Why is this price obviously worth paying?"**
+
+---
+
+## 7. Unit Economics
+
+At minimum, estimate:
+
+- **ARPU:** average revenue per customer.
+- **COGS:** variable cost to serve one customer.
+- **Gross margin:** `(Revenue - COGS) / Revenue`.
+- **CAC:** customer acquisition cost.
+- **LTV:** customer lifetime value.
+- **Payback period:** CAC / monthly gross profit per customer.
+
+For AI products, explicitly consider:
+
+- Model/API inference cost.
+- Embeddings/vector database cost.
+- Storage.
+- Data processing.
+- Human review.
+- Support.
+- Cloud infrastructure.
+
+A useful simplified LTV model is:
+
+**LTV ≈ ARPU × Gross Margin × Customer Lifetime**
+
+Do not invent false precision. Use ranges and clearly label assumptions.
+
+---
+
+## 8. Distribution / Go-to-Market
+
+A great product with no acquisition path is a weak business.
+
+Answer:
+
+> **How do we get the first 10, then 100, then 1,000 customers?**
+
+Choose one realistic wedge:
+
+- Direct outreach to a narrow B2B segment.
+- Partnerships.
+- Existing communities.
+- Campus/community distribution.
+- Developer ecosystem.
+- Marketplace distribution.
+- API/integration partnerships.
+- Product-led growth.
+- Referral loops.
+
+For the hackathon, prioritize a credible first-customer path over a huge marketing plan.
+
+---
+
+## 9. Competitive Positioning
+
+Never say:
+
+> "There are no competitors."
+
+The real competitor may be:
+
+- Excel/Google Sheets.
+- WhatsApp.
+- Manual labor.
+- Internal software.
+- Existing SaaS.
+- Doing nothing.
+- A consultant/service provider.
+
+Build a simple comparison around 3–5 meaningful dimensions:
+
+- Cost.
+- Speed.
+- Accuracy.
+- Automation.
+- Ease of deployment.
+- Integration.
+- Real-time capability.
+- Customization.
+
+Then identify the **wedge**: the one reason the first customer chooses you.
+
+---
+
+## 10. Defensibility
+
+Hackathon judges often hear similar ideas. Explain why the product gets stronger over time.
+
+Potential moats:
+
+- Proprietary workflow/data.
+- Network effects.
+- Deep integrations.
+- Switching costs.
+- Domain-specific models.
+- Proprietary evaluation/feedback loops.
+- Distribution advantage.
+- Operational know-how.
+- Regulatory/compliance capability.
+- Community/ecosystem.
+
+Do not call "we use AI" a moat. Technology is only defensible when it is difficult to reproduce or becomes embedded in a broader advantage.
+
+---
+
+## 11. Make the Technical Architecture Support the Business
+
+Every major technical component should have a business reason.
+
+For example:
+
+- Event-driven architecture → lower latency / scalable processing.
+- Caching → lower infrastructure cost.
+- Smaller model + routing → lower inference cost.
+- Human-in-the-loop → improves trust in high-risk workflows.
+- Local inference → privacy and lower recurring API cost.
+- Multi-tenant SaaS architecture → lower cost per customer.
+
+When presenting architecture, connect technical choices to:
+
+**customer value + cost + scalability + trust**.
+
+---
+
+## 12. Design the MVP Around the "Paying Moment"
+
+The MVP should demonstrate the moment where the customer receives value.
+
+Avoid spending most hackathon time on:
+
+- Login systems.
+- Complex settings pages.
+- Admin dashboards with fake depth.
+- Large feature lists.
+- Generic chat interfaces.
+
+Prioritize the shortest end-to-end path from:
+
+**Problem → Input → Intelligence/Workflow → Output → Measurable Value**
+
+The demo should make the value obvious within 30–60 seconds.
+
+---
+
+## 13. Business Model Canvas Checklist
+
+Use these fields:
+
+### Customer Segments
+Who pays and who uses?
+
+### Problem
+What costly or painful problem exists?
+
+### Value Proposition
+What measurable outcome do we create?
+
+### Solution
+What exactly does the product do?
+
+### Channels
+How do we reach customers?
+
+### Revenue Streams
+How do we make money?
+
+### Cost Structure
+What are the major fixed and variable costs?
+
+### Key Metrics
+What numbers prove the product is working?
+
+### Unfair Advantage
+What becomes difficult to copy?
+
+---
+
+## 14. Metrics That Make a Hackathon Pitch Stronger
+
+Avoid vanity metrics such as "10 features" or "built with 8 technologies."
+
+Prefer:
+
+- Time saved per workflow.
+- Accuracy improvement.
+- Cost reduction.
+- Conversion improvement.
+- Latency reduction.
+- False-positive/false-negative reduction.
+- Revenue generated.
+- Adoption/retention target.
+- Customer payback period.
+- Gross margin potential.
+
+When real customer data is unavailable, use:
+
+**Pilot target → measurement method → success threshold**
+
+Example:
+
+> Pilot goal: reduce invoice-processing time by 60%.
+> Measure: median processing time across 100 invoices.
+> Success threshold: ≤ 40% of baseline time.
+
+---
+
+## 15. Hackathon-Specific Business Model Rules
+
+### Rule 1: Judges buy the story before the spreadsheet
+The narrative must be coherent:
+
+**Pain → Insight → Solution → Proof → Business → Scale**
+
+### Rule 2: Show evidence early
+Even lightweight evidence is useful:
+
+- User interviews.
+- Survey responses.
+- Public datasets.
+- Pilot observations.
+- Benchmark results.
+- Existing market evidence.
+
+### Rule 3: Make money feel inevitable
+The business model should logically follow from the value delivered.
+
+### Rule 4: Do not overbuild the financial model
+A hackathon needs credible economics, not a 40-sheet investment-banking model.
+
+### Rule 5: Connect every feature to a business outcome
+If a feature does not improve acquisition, activation, retention, revenue, cost, trust, or defensibility, question why it is in the MVP.
+
+### Rule 6: Make the first customer obvious
+A specific buyer is more convincing than a giant TAM.
+
+### Rule 7: Differentiate on workflow, not only on AI
+A strong workflow around a model is usually more compelling than a thin wrapper around an LLM.
+
+---
+
+## 16. Red Flags
+
+The business model needs revision when:
+
+- The target customer is "everyone."
+- The product saves no measurable money/time.
+- The team cannot name who pays.
+- Pricing is chosen randomly.
+- Customer acquisition depends entirely on "social media/viral growth."
+- Competition is dismissed.
+- AI/API costs would consume most revenue.
+- The product requires massive scale before becoming economically viable.
+- The product depends on unrealistic regulations, partnerships, or datasets.
+- Revenue is described but customer willingness to pay is unexplained.
+- The demo proves technical functionality but not customer value.
+
+---
+
+## 17. Recommended Hackathon Pitch Business Slide
+
+Use a single slide with this structure:
+
+**Customer**
+Specific first buyer.
+
+**Pain**
+Quantified cost/problem.
+
+**Value**
+Measurable outcome.
+
+**Business Model**
+Primary pricing mechanism + price range.
+
+**Unit Economics**
+Gross margin / CAC / payback assumptions.
+
+**Go-to-Market**
+First acquisition channel.
+
+**Scale**
+How the model expands to more users, teams, markets, or transactions.
+
+Keep the slide visually simple. One number should be visually dominant: the economic value created, price, or ROI.
+
+---
+
+## 18. Final Decision Framework
+
+Before approving a project idea, score each dimension from 1–5:
+
+| Dimension | Question |
+|---|---|
+| Pain | Is the problem genuinely painful? |
+| Buyer | Is the paying customer obvious? |
+| Value | Can we quantify the benefit? |
+| Differentiation | Why would someone choose this? |
+| Revenue | Is monetization natural? |
+| Economics | Can serving the customer be profitable? |
+| Distribution | Can we realistically reach early users? |
+| Defensibility | Does the advantage strengthen over time? |
+| Demoability | Can value be demonstrated quickly? |
+| Scalability | Can this grow beyond the prototype? |
+
+### Approval rule
+
+A strong hackathon candidate should generally score:
+
+- **4+ on Pain, Value, Differentiation, and Demoability**
+- **3+ on Revenue, Distribution, Economics, and Defensibility**
+- No critical dimension below **3**
+
+If a project is technically impressive but economically weak, do not automatically discard it. First look for a better customer, use case, pricing model, or distribution wedge.
+
+---
+
+## 19. One-Sentence Business Model Test
+
+The team should be able to say:
+
+> **"We help [specific customer] achieve [measurable outcome] by [product mechanism], and we make money by charging [pricing model] because the customer gains [economic value]."**
+
+If this sentence is unclear, the business model is not ready.
+
+---
+
+## 20. Hackathon-Winning Principle
+
+The strongest project is rarely the one with the most features or the most sophisticated technology.
+
+It is the one where:
+
+**The problem is obvious → the insight is sharp → the demo proves the insight → the economics make sense → the path to scale is believable.**

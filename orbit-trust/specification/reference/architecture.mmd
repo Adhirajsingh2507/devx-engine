@@ -1,0 +1,14 @@
+flowchart TD
+  UI[Next.js static mission console on Vercel CDN] --> API[FastAPI on Vercel Python Function]
+  UI --> AUTH[Supabase Auth]
+  API <--> DB[Supabase ledger, RLS, leases and quotas]
+  API --> CORE[Rust PyO3: supported encounter math and pair batches]
+  API --> POLICY[Deterministic audit, deadline policy and consequence services]
+  API --> ADK[ADK bounded investigation workflow]
+  ADK --> GROQ[Groq investigator and separate formatter]
+  ADK --> TOOLS[Allowlisted version-bound evidence tools]
+  TOOLS --> DB
+  TOOLS --> CORE
+  ADK --> VALIDATE[Host validates facts, templates and assessment revision]
+  VALIDATE --> DB
+  DB --> UI

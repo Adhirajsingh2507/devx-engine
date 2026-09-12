@@ -1,0 +1,219 @@
+{
+  "package": "ORBIT-TRUST",
+  "version": "2.0",
+  "revision": "game-preservation-1",
+  "prepared_on": "2026-09-11",
+  "scope": "Specification and reference data; no implemented application",
+  "files": [
+    {
+      "path": "00_BOOTSTRAP_PROMPT.md",
+      "bytes": 5559,
+      "sha256": "130a09adbce5c23e20b0bacbc12774c848b7e7b9c4eb22ed5ffb048180d09d25"
+    },
+    {
+      "path": "01_PRODUCT_AND_SCOPE.md",
+      "bytes": 6420,
+      "sha256": "1de17f496505b16664c998b48c43f8baace127b7aa5f1197aa8680fb71f0f23f"
+    },
+    {
+      "path": "02_DECISIONS_AND_ASSUMPTIONS.md",
+      "bytes": 6754,
+      "sha256": "2f38c2c72474f634ecb16a8c9e6e4aa2770308e127f4accb887e84e47c5e5f73"
+    },
+    {
+      "path": "03_REPOSITORY_REUSE.md",
+      "bytes": 7098,
+      "sha256": "bfee08123f89101c9f6611597b6c87b87eaac312a4141076e3c47c9507376ca1"
+    },
+    {
+      "path": "04_ARCHITECTURE_AND_BUILD_LAYOUT.md",
+      "bytes": 7628,
+      "sha256": "1d1bb6c215d6778db61dfa077d2cf71af360e3361c38388b641e2149913c1b2e"
+    },
+    {
+      "path": "05_DOMAIN_AND_API_CONTRACTS.md",
+      "bytes": 14088,
+      "sha256": "43597b4242375bd5bbec6015c504b8ba88b25b42cb29064ff672c6b2ab9da1ca"
+    },
+    {
+      "path": "06_ORBITAL_MATH_AND_TRIAGE.md",
+      "bytes": 11599,
+      "sha256": "6a9bf5cfb7685bb52c0f3531d9126259c7df9cfb91984e3021c392aadd3fd018"
+    },
+    {
+      "path": "07_FLEET_AND_COMMUNICATION.md",
+      "bytes": 6727,
+      "sha256": "83b1a3032ee9421f695708e7d6c36f567f593e1619e5d7e7c74b1931ed450ba0"
+    },
+    {
+      "path": "08_REENTRY_AND_FINANCIAL_MODELS.md",
+      "bytes": 6581,
+      "sha256": "35b6d860ce87f281d0da436fc3d58f3ee69e376ebc3918a44f6b660335530035"
+    },
+    {
+      "path": "09_ADK_GROQ_AND_VALIDATION.md",
+      "bytes": 8878,
+      "sha256": "434a29fc703feb91a8d81578600b3d2d78cdb2cd6bdde5d6a196f497b3ff3091"
+    },
+    {
+      "path": "10_INTERFACE_AND_DESIGN.md",
+      "bytes": 5767,
+      "sha256": "aeead9a4cf67df7d4b67a0892ef2d9300dd7bb0d4ee88b3ec5ba87ae9134f9d1"
+    },
+    {
+      "path": "11_DATA_AND_FIXTURE_CATALOG.md",
+      "bytes": 7190,
+      "sha256": "f9f230f9d7d22f34d75538ef3cd2ea3fb8cd330b3e242715b4d3eed41c0c9cf7"
+    },
+    {
+      "path": "12_TESTING_AND_ACCEPTANCE.md",
+      "bytes": 7415,
+      "sha256": "b02f391ae63ca328e7b33ba5a6f7d881b67d925a9c0e659e2857b780e256bc51"
+    },
+    {
+      "path": "13_IMPLEMENTATION_MILESTONES.md",
+      "bytes": 8430,
+      "sha256": "42d1a4b7907ac60967195ca4742b9e2bd9acc624c74248416b1c57960760bd51"
+    },
+    {
+      "path": "14_VERCEL_SUPABASE_DEPLOYMENT.md",
+      "bytes": 11334,
+      "sha256": "0e76709d40c78627241fbb03d80fc5a42eaf6ba47fc08337b1b90ccb0b57364f"
+    },
+    {
+      "path": "15_BUSINESS_PITCH_AND_DEMO.md",
+      "bytes": 11559,
+      "sha256": "cdcd054daf5844ab146db76059c79ddabff8f23e21e6cd49d65ffee0557f3142"
+    },
+    {
+      "path": "16_SOURCES_AND_EVIDENCE.md",
+      "bytes": 7775,
+      "sha256": "af631e485033efc615b1ed9e6192cc3816b090da6b9379056c70e0345fe54475"
+    },
+    {
+      "path": "17_TRACEABILITY_AND_RELEASE_GATE.md",
+      "bytes": 3753,
+      "sha256": "5e81eaadc16e4881a286f11ce64f2314bbedbe537b3f5295b790f03f416b89a6"
+    },
+    {
+      "path": "18_GLOSSARY_AND_RECOVERY.md",
+      "bytes": 4001,
+      "sha256": "2a592e5cbb8bad25cec31efd3b97f9eddf08e2ccfeea95d2d4d961afeec71f8d"
+    },
+    {
+      "path": "19_DATABASE_AUTH_AND_TRANSACTIONS.md",
+      "bytes": 11412,
+      "sha256": "d8017011e8d3c8d39521738aad316bfb87e04c7cdbaad9311303ef43c8e5b463"
+    },
+    {
+      "path": "fixtures/adversarial_cases.json",
+      "bytes": 1781,
+      "sha256": "cf9319cad2a69701e4c4899447f6b6975aca3db46c12f85b02a9e21484950176"
+    },
+    {
+      "path": "fixtures/communications.json",
+      "bytes": 1983,
+      "sha256": "12581578aae61652f837238fb1569d5eb3e5a4b83bb45e6c4ee2ae96cc9a4dd3"
+    },
+    {
+      "path": "fixtures/economics.json",
+      "bytes": 1988,
+      "sha256": "91612b69fc25a70c40f0e1ee9ba969e450dd52f3968ec6a9d09ce31ab392248d"
+    },
+    {
+      "path": "fixtures/encounter_reference.json",
+      "bytes": 20850,
+      "sha256": "24d51a644d1978db235720deac5f9cc923835e67d11d040bf06b6c61cabd2ce3"
+    },
+    {
+      "path": "fixtures/fleet_candidates.json",
+      "bytes": 7530,
+      "sha256": "2cb29f33d9210d41bceac6e57252dfcbd0701011200d068c513096647013724e"
+    },
+    {
+      "path": "fixtures/reentry.json",
+      "bytes": 4676,
+      "sha256": "999de9130cb0279c3a95bb273e97a48e1849715ffcd8c4062b3c350fca4ced5e"
+    },
+    {
+      "path": "fixtures/report_update_cases.json",
+      "bytes": 1289,
+      "sha256": "67f9a3b788d996f19e9c1f090ecbda1ff07b8cbd0eabbd68aca1d5cba2296b18"
+    },
+    {
+      "path": "fixtures/triage_cases.json",
+      "bytes": 2259,
+      "sha256": "bad6eb5b3ad04078e48dd39cb8b1e10f51e70b439a0977badae5dd56ab953840"
+    },
+    {
+      "path": "ORBIT_TRUST_COMPLETE_HANDOFF.md",
+      "bytes": 279601,
+      "sha256": "b8533300ae5f104b88cea9ce1b9045b10bebffd8efd24879d384fd6af9fbdbc7"
+    },
+    {
+      "path": "ORBIT_TRUST_IMPLEMENTATION_HANDOFF.pdf",
+      "bytes": 284830,
+      "sha256": "8cc7e050d4ad1c738a8184373846dc51264fbc69287bb706b521272b4c60799f"
+    },
+    {
+      "path": "PACKAGE_VERIFICATION.md",
+      "bytes": 1717,
+      "sha256": "059ff20ab5dbaecbc512f3d8c0cc02f9b9c53e94fd7fdd6686b8c24d799b4d98"
+    },
+    {
+      "path": "reference/architecture.mmd",
+      "bytes": 643,
+      "sha256": "b442e547367da302368851896eadc4b0f1e9d9806b95f61ce1c5f77e3bd35623"
+    },
+    {
+      "path": "reference/BUSINESS_REFERENCE.txt",
+      "bytes": 13857,
+      "sha256": "7a5a97e2a290f409feadc447a47e8fde8d25fd34c305c3b5f34f1c2aa8f251df"
+    },
+    {
+      "path": "reference/esa_aggregate_audit.json",
+      "bytes": 4697,
+      "sha256": "916d444b6928404204f88631b07fada8ef203bd3b3b74d5046d7753f3189bb7a"
+    },
+    {
+      "path": "reference/google-adk-component-by-component.pdf",
+      "bytes": 7391511,
+      "sha256": "dafb6327f525a3eed0df7baf97dfb6bd60d2d41deeb0f9a64e752ef08e0f6f80"
+    },
+    {
+      "path": "reference/google_adk_source.txt",
+      "bytes": 13218,
+      "sha256": "84fe9813230cd1dc0eaf82ffbe16d09fbe7c9b82c21d970c90767e5288047ea4"
+    },
+    {
+      "path": "reference/numerical_crosschecks.json",
+      "bytes": 1513,
+      "sha256": "1f84792ab6f5dbb526d8587d9f2305d7a839195bc69571d2507b1d29151a3aa1"
+    },
+    {
+      "path": "reference/OWNER_BRIEF.md",
+      "bytes": 3699,
+      "sha256": "628bbd523aa860bf2ae5d6a7390cdbb0cf4121a8380d5f9d9bfe96cbab9a6eb0"
+    },
+    {
+      "path": "reference/PACKAGE_DATA_QA.json",
+      "bytes": 2783,
+      "sha256": "81c0113d6fa76c7e2b02dfd1ff22e453fc13a86b2a5e392f4395dabddad74427"
+    },
+    {
+      "path": "reference/PACKAGE_DOCUMENT_QA.json",
+      "bytes": 8368,
+      "sha256": "d9ce2f6c96c4a9a9919e34d1e56950f97677373aa94c140c3678a981182a03c8"
+    },
+    {
+      "path": "schemas/core.schema.json",
+      "bytes": 31072,
+      "sha256": "b0ff913be52e53cd9a595ee2dd75c8a544b4854a9402897fe4949f1189849911"
+    },
+    {
+      "path": "START_HERE.md",
+      "bytes": 4983,
+      "sha256": "90e2cc6129cac0420328bc4c89c4ae85ebc267da8254342d9329b9628257dc9a"
+    }
+  ]
+}

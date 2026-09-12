@@ -1,0 +1,331 @@
+{
+  "scope": "Handoff artifact validation; not application acceptance.",
+  "documents": 21,
+  "pdf_pages": 55,
+  "chapter_start_pages": {
+    "start": 2,
+    "00": 4,
+    "01": 6,
+    "02": 8,
+    "03": 10,
+    "04": 12,
+    "05": 15,
+    "06": 20,
+    "07": 23,
+    "08": 25,
+    "09": 27,
+    "10": 29,
+    "11": 31,
+    "12": 33,
+    "13": 36,
+    "14": 39,
+    "15": 42,
+    "16": 46,
+    "17": 48,
+    "18": 50,
+    "19": 52
+  },
+  "combined_markdown_bytes": 279601,
+  "all_requirement_ids_mapped": true,
+  "all_40_acceptance_ids_present": true,
+  "pdf_visual_review": "Complete: updated PDF rendered and viewed in contact sheets; revised preservation passages inspected at full page size.",
+  "handoff_revision": "game-preservation-1",
+  "layout_checks": {
+    "rendered_pages": 55,
+    "pdf_pages": 55,
+    "sparse_pages": [],
+    "out_of_page_chars": [],
+    "replacement_glyphs": []
+  },
+  "transfer_and_consistency_checks": [
+    {
+      "check": "portable appendix schemas/core.schema.json",
+      "passed": true
+    },
+    {
+      "check": "portable appendix fixtures/adversarial_cases.json",
+      "passed": true
+    },
+    {
+      "check": "portable appendix fixtures/communications.json",
+      "passed": true
+    },
+    {
+      "check": "portable appendix fixtures/economics.json",
+      "passed": true
+    },
+    {
+      "check": "portable appendix fixtures/encounter_reference.json",
+      "passed": true
+    },
+    {
+      "check": "portable appendix fixtures/fleet_candidates.json",
+      "passed": true
+    },
+    {
+      "check": "portable appendix fixtures/reentry.json",
+      "passed": true
+    },
+    {
+      "check": "portable appendix fixtures/report_update_cases.json",
+      "passed": true
+    },
+    {
+      "check": "portable appendix fixtures/triage_cases.json",
+      "passed": true
+    },
+    {
+      "check": "portable appendix reference/esa_aggregate_audit.json",
+      "passed": true
+    },
+    {
+      "check": "portable appendix reference/numerical_crosschecks.json",
+      "passed": true
+    },
+    {
+      "check": "complete document 00_BOOTSTRAP_PROMPT.md",
+      "passed": true
+    },
+    {
+      "check": "source notes 00_BOOTSTRAP_PROMPT.md",
+      "passed": true
+    },
+    {
+      "check": "complete document 01_PRODUCT_AND_SCOPE.md",
+      "passed": true
+    },
+    {
+      "check": "source notes 01_PRODUCT_AND_SCOPE.md",
+      "passed": true
+    },
+    {
+      "check": "complete document 02_DECISIONS_AND_ASSUMPTIONS.md",
+      "passed": true
+    },
+    {
+      "check": "source notes 02_DECISIONS_AND_ASSUMPTIONS.md",
+      "passed": true
+    },
+    {
+      "check": "complete document 03_REPOSITORY_REUSE.md",
+      "passed": true
+    },
+    {
+      "check": "source notes 03_REPOSITORY_REUSE.md",
+      "passed": true
+    },
+    {
+      "check": "complete document 04_ARCHITECTURE_AND_BUILD_LAYOUT.md",
+      "passed": true
+    },
+    {
+      "check": "source notes 04_ARCHITECTURE_AND_BUILD_LAYOUT.md",
+      "passed": true
+    },
+    {
+      "check": "complete document 05_DOMAIN_AND_API_CONTRACTS.md",
+      "passed": true
+    },
+    {
+      "check": "source notes 05_DOMAIN_AND_API_CONTRACTS.md",
+      "passed": true
+    },
+    {
+      "check": "complete document 06_ORBITAL_MATH_AND_TRIAGE.md",
+      "passed": true
+    },
+    {
+      "check": "source notes 06_ORBITAL_MATH_AND_TRIAGE.md",
+      "passed": true
+    },
+    {
+      "check": "complete document 07_FLEET_AND_COMMUNICATION.md",
+      "passed": true
+    },
+    {
+      "check": "source notes 07_FLEET_AND_COMMUNICATION.md",
+      "passed": true
+    },
+    {
+      "check": "complete document 08_REENTRY_AND_FINANCIAL_MODELS.md",
+      "passed": true
+    },
+    {
+      "check": "source notes 08_REENTRY_AND_FINANCIAL_MODELS.md",
+      "passed": true
+    },
+    {
+      "check": "complete document 09_ADK_GROQ_AND_VALIDATION.md",
+      "passed": true
+    },
+    {
+      "check": "source notes 09_ADK_GROQ_AND_VALIDATION.md",
+      "passed": true
+    },
+    {
+      "check": "complete document 10_INTERFACE_AND_DESIGN.md",
+      "passed": true
+    },
+    {
+      "check": "source notes 10_INTERFACE_AND_DESIGN.md",
+      "passed": true
+    },
+    {
+      "check": "complete document 11_DATA_AND_FIXTURE_CATALOG.md",
+      "passed": true
+    },
+    {
+      "check": "source notes 11_DATA_AND_FIXTURE_CATALOG.md",
+      "passed": true
+    },
+    {
+      "check": "complete document 12_TESTING_AND_ACCEPTANCE.md",
+      "passed": true
+    },
+    {
+      "check": "source notes 12_TESTING_AND_ACCEPTANCE.md",
+      "passed": true
+    },
+    {
+      "check": "complete document 13_IMPLEMENTATION_MILESTONES.md",
+      "passed": true
+    },
+    {
+      "check": "source notes 13_IMPLEMENTATION_MILESTONES.md",
+      "passed": true
+    },
+    {
+      "check": "complete document 14_VERCEL_SUPABASE_DEPLOYMENT.md",
+      "passed": true
+    },
+    {
+      "check": "source notes 14_VERCEL_SUPABASE_DEPLOYMENT.md",
+      "passed": true
+    },
+    {
+      "check": "complete document 15_BUSINESS_PITCH_AND_DEMO.md",
+      "passed": true
+    },
+    {
+      "check": "source notes 15_BUSINESS_PITCH_AND_DEMO.md",
+      "passed": true
+    },
+    {
+      "check": "complete document 16_SOURCES_AND_EVIDENCE.md",
+      "passed": true
+    },
+    {
+      "check": "source notes 16_SOURCES_AND_EVIDENCE.md",
+      "passed": true
+    },
+    {
+      "check": "complete document 17_TRACEABILITY_AND_RELEASE_GATE.md",
+      "passed": true
+    },
+    {
+      "check": "source notes 17_TRACEABILITY_AND_RELEASE_GATE.md",
+      "passed": true
+    },
+    {
+      "check": "complete document 18_GLOSSARY_AND_RECOVERY.md",
+      "passed": true
+    },
+    {
+      "check": "source notes 18_GLOSSARY_AND_RECOVERY.md",
+      "passed": true
+    },
+    {
+      "check": "complete document 19_DATABASE_AUTH_AND_TRANSACTIONS.md",
+      "passed": true
+    },
+    {
+      "check": "source notes 19_DATABASE_AUTH_AND_TRANSACTIONS.md",
+      "passed": true
+    },
+    {
+      "check": "agent template consistency summary_template_code",
+      "passed": true
+    },
+    {
+      "check": "agent template consistency request_template_code",
+      "passed": true
+    },
+    {
+      "check": "uniform policy ID",
+      "passed": true
+    },
+    {
+      "check": "no obsolete fixture transport",
+      "passed": true
+    },
+    {
+      "check": "not shipping raw ESA archive",
+      "passed": true
+    },
+    {
+      "check": "no environment secret files",
+      "passed": true
+    },
+    {
+      "check": "no application implementation files",
+      "passed": true
+    },
+    {
+      "check": "important future game preservation START_HERE.md",
+      "passed": true
+    },
+    {
+      "check": "important future game preservation 00_BOOTSTRAP_PROMPT.md",
+      "passed": true
+    },
+    {
+      "check": "important future game preservation 02_DECISIONS_AND_ASSUMPTIONS.md",
+      "passed": true
+    },
+    {
+      "check": "important future game preservation 03_REPOSITORY_REUSE.md",
+      "passed": true
+    },
+    {
+      "check": "important future game preservation 04_ARCHITECTURE_AND_BUILD_LAYOUT.md",
+      "passed": true
+    },
+    {
+      "check": "important future game preservation 13_IMPLEMENTATION_MILESTONES.md",
+      "passed": true
+    },
+    {
+      "check": "important future game preservation 14_VERCEL_SUPABASE_DEPLOYMENT.md",
+      "passed": true
+    },
+    {
+      "check": "important future game preservation 17_TRACEABILITY_AND_RELEASE_GATE.md",
+      "passed": true
+    },
+    {
+      "check": "important future game preservation reference/OWNER_BRIEF.md",
+      "passed": true
+    },
+    {
+      "check": "superseded game description removed",
+      "passed": true
+    },
+    {
+      "check": "existing schema and fixture data unchanged",
+      "passed": true
+    },
+    {
+      "check": "all PDF pages rendered",
+      "passed": true
+    },
+    {
+      "check": "PDF text within page bounds",
+      "passed": true
+    },
+    {
+      "check": "PDF no replacement glyphs",
+      "passed": true
+    }
+  ],
+  "passed_transfer_checks": 72
+}

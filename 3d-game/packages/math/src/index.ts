@@ -10,3 +10,6 @@ export {
   aabbAabb,
   sphereAabb,
 } from "./intersect.ts";
+export { Triangle } from "./triangle.ts";
+export { rayTriangle } from "./triangle.ts";
+export type { TriHit } from "./triangle.ts";

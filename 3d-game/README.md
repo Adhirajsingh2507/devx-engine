@@ -68,6 +68,26 @@ pnpm test        # tests only
 pnpm typecheck   # types only
 ```
 
+## Garuda devotional render
+
+The offline renderer includes a procedural white-and-gold Garuda with layered
+wings, jewelry, a devotional flight pose, and a removable Vishnu rider. It uses
+the engine's triangle mesh and BVH path rather than an imported image or model.
+
+```bash
+# Fast composition preview
+pnpm --filter server render 640 360 16 5 garuda-preview.png --scene garuda
+
+# Final Full HD frontend asset
+pnpm --filter server render 1920 1080 12 5 ../client/public/garuda.png --scene garuda
+
+# Open /?mode=viewer for Garuda; / remains the physics sandbox
+pnpm --filter client dev
+```
+
+`buildGaruda()` includes Vishnu for the reference-inspired hero scene. Pass
+`{ includeVishnu: false }` to reuse Garuda alone in another composition.
+
 Node ≥ 22 runs the `.ts` sources directly via type-stripping — **no build
 step**. Packages import each other's source (`@engine/math` → its `src`), and
 `tsc` runs as a pure checker (`noEmit`), never a compiler. When a package is
