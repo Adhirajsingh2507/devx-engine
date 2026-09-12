@@ -1,19 +1,44 @@
 import { Vec3 } from "@engine/math";
 import { writeFileSync } from "node:fs";
 import { Camera, radiance, mulberry32, acesTonemap } from "./tracer.ts";
+import type { Scene } from "./tracer.ts";
 import { encodePng } from "./png.ts";
 import { SCENE, CAMERA } from "./scene.ts";
+import { GARUDA_SCENE, GARUDA_CAMERA } from "./garuda-scene.ts";
 
-// CLI: render.ts [width] [height] [spp] [depth] [out.png]
+// CLI: render.ts [width] [height] [spp] [depth] [out.png] [--scene garuda]
 const a = process.argv.slice(2);
+
+// extract --scene flag
+let sceneName = "default";
+const sceneIdx = a.indexOf("--scene");
+if (sceneIdx !== -1) {
+  sceneName = a[sceneIdx + 1] ?? "default";
+  a.splice(sceneIdx, 2);
+}
+
 const width = Number(a[0] ?? 640);
 const height = Number(a[1] ?? 360);
 const spp = Number(a[2] ?? 64);
 const depth = Number(a[3] ?? 6);
 const out = a[4] ?? "render.png";
 
+// select scene & camera
+let scene: Scene;
+let camCfg: typeof CAMERA;
+
+if (sceneName === "garuda") {
+  scene = GARUDA_SCENE;
+  camCfg = GARUDA_CAMERA;
+  process.stderr.write(`scene: garuda (${scene.meshes?.length ?? 0} mesh objects)\n`);
+} else {
+  scene = SCENE;
+  camCfg = CAMERA;
+  process.stderr.write(`scene: default\n`);
+}
+
 const cam = new Camera(
-  CAMERA.eye, CAMERA.target, CAMERA.up, CAMERA.vfov, width / height, CAMERA.aperture,
+  camCfg.eye, camCfg.target, camCfg.up, camCfg.vfov, width / height, camCfg.aperture,
 );
 
 const rgb = new Uint8Array(width * height * 3);
@@ -27,7 +52,7 @@ for (let y = 0; y < height; y++) {
     for (let s = 0; s < spp; s++) {
       const u = (x + rng()) / width;
       const t = 1 - (y + rng()) / height; // row 0 = top of image
-      col = col.add(radiance(SCENE, cam.ray(u, t, rng), depth, rng));
+      col = col.add(radiance(scene, cam.ray(u, t, rng), depth, rng));
     }
     col = col.scale(1 / spp);
     const i = (y * width + x) * 3;

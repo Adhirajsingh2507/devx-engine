@@ -1,4 +1,5 @@
 import { Vec3, Ray, Sphere, raySphere } from "@engine/math";
+import type { TriMeshObj } from "./mesh.ts";
 
 /**
  * A compact Monte-Carlo path tracer. It reuses @engine/math for all geometry
@@ -26,9 +27,15 @@ export interface Obj {
 
 export interface Scene {
   objects: Obj[];
+  meshes?: TriMeshObj[];
   planeY: number;
   planeA: Vec3; // checker colour A
   planeB: Vec3; // checker colour B
+  skyHorizon?: Vec3;
+  skyZenith?: Vec3;
+  skyIntensity?: number;
+  sunDirection?: Vec3;
+  sunColor?: Vec3;
 }
 
 export interface Hit {
@@ -98,6 +105,22 @@ export function intersect(scene: Scene, ray: Ray): Hit | null {
     }
   }
 
+  // triangle meshes via BVH
+  if (scene.meshes) {
+    for (const mo of scene.meshes) {
+      const mh = mo.mesh.intersect(ray, bestT);
+      if (mh && mh.t > EPS && mh.t < bestT) {
+        bestT = mh.t;
+        hit = {
+          t: mh.t,
+          point: mh.point,
+          normal: mh.normal,
+          material: mo.materials[mh.matIndex] ?? mo.materials[0],
+        };
+      }
+    }
+  }
+
   // infinite ground plane at y = planeY, with a checker albedo
   if (Math.abs(ray.direction.y) > 1e-9) {
     const t = (scene.planeY - ray.origin.y) / ray.direction.y;
@@ -117,11 +140,11 @@ export function intersect(scene: Scene, ray: Ray): Hit | null {
 }
 
 /** Sky gradient — doubles as the background and as image-based fill light. */
-function sky(dir: Vec3): Vec3 {
+function sky(scene: Scene, dir: Vec3): Vec3 {
   const t = 0.5 * (dir.y + 1);
-  const horizon = new Vec3(0.85, 0.78, 0.68);
-  const zenith = new Vec3(0.22, 0.36, 0.7);
-  return horizon.lerp(zenith, t).scale(1.15);
+  const horizon = scene.skyHorizon ?? new Vec3(0.85, 0.78, 0.68);
+  const zenith = scene.skyZenith ?? new Vec3(0.22, 0.36, 0.7);
+  return horizon.lerp(zenith, t).scale(scene.skyIntensity ?? 1.15);
 }
 
 /** Radiance along a ray, accumulated iteratively with a throughput term. */
@@ -133,13 +156,22 @@ export function radiance(scene: Scene, ray: Ray, maxDepth: number, rng: Rng): Ve
   for (let bounce = 0; bounce < maxDepth; bounce++) {
     const hit = intersect(scene, r);
     if (!hit) {
-      acc = acc.add(mul(throughput, sky(r.direction)));
+      acc = acc.add(mul(throughput, sky(scene, r.direction)));
       break;
     }
     const m = hit.material;
     if (m.emission) acc = acc.add(mul(throughput, m.emission));
 
     const origin = hit.point.add(hit.normal.scale(EPS));
+    if (scene.sunDirection && scene.sunColor && !m.emission) {
+      const lightDir = scene.sunDirection.normalize();
+      const nDotL = Math.max(0, hit.normal.dot(lightDir));
+      if (nDotL > 0 && intersect(scene, new Ray(origin, lightDir)) === null) {
+        const direct = mul(m.albedo, scene.sunColor).scale(nDotL);
+        acc = acc.add(mul(throughput, direct));
+      }
+    }
+
     let dir: Vec3;
     if (m.metal) {
       const refl = reflect(r.direction, hit.normal);

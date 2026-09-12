@@ -1,0 +1,58 @@
+{
+  "version": 1,
+  "project": {
+    "name": "3d-game",
+    "productType": "cinematic 3D engine showcase",
+    "stack": ["TypeScript", "Vite", "WebGL2", "custom path tracer"]
+  },
+  "sources": {
+    "tokens": [],
+    "components": [],
+    "assets": [],
+    "instructions": []
+  },
+  "design": {
+    "colorMode": "dark",
+    "colors": {
+      "background": "#08090c",
+      "foreground": "#f8f2e5",
+      "muted": "#b8ad9b",
+      "accent": "#e7b85d"
+    },
+    "typography": {
+      "display": "Georgia / Noto Serif Devanagari",
+      "interface": "Inter / system sans",
+      "technical": "ui-monospace"
+    },
+    "spacing": {},
+    "radius": {},
+    "shadows": {},
+    "motion": {},
+    "density": "cinematic"
+  },
+  "components": {
+    "installed": [],
+    "preferredPrimitives": [],
+    "patterns": []
+  },
+  "constraints": {
+    "must": [
+      "Preserve the physics sandbox as a separate mode",
+      "Support keyboard focus and reduced motion",
+      "Use the custom DevX render engines as the source of visuals"
+    ],
+    "avoid": [
+      "Generic glass dashboard cards",
+      "Excessive gradients",
+      "Sacred iconography assigned to the wrong figure"
+    ]
+  },
+  "decisions": [
+    "Garuda is white with dense gold ornamentation and layered spread wings",
+    "The hero scene includes Vishnu as an optional rider, enabled by default",
+    "The viewer remains separate from the physics sandbox",
+    "The final render target is 1920x1080; previews use lower resolution"
+  ],
+  "evidence": [],
+  "generatedAt": "2026-09-12T00:00:35.672Z"
+}
