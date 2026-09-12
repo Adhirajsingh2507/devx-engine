@@ -83,15 +83,45 @@ def validate_selection(selection: dict, assessment: dict) -> Optional[str]:
     return None
 
 
-def investigate(assessment: dict) -> dict:
-    """Return a validated, host-owned review packet. `generation_mode` is
-    `template_fallback` until a provider is wired behind this function."""
+def _fallback(assessment: dict, *, reason: Optional[str] = None) -> dict:
+    """Deterministic, host-validated review packet — the safety net."""
     selection = _select(assessment)
-    reason = validate_selection(selection, assessment)
-    if reason is not None:  # our own deterministic selection should always pass
-        raise AssertionError(f"deterministic selection failed validation: {reason}")
-    return {
+    val = validate_selection(selection, assessment)
+    if val is not None:  # our own deterministic selection should always pass
+        raise AssertionError(f"deterministic selection failed validation: {val}")
+    packet = {
         "generation_mode": "template_fallback",
         "selection": selection,
         "authoritative_text": _SUMMARY_TEXT[selection["summary_template_code"]],
+    }
+    if reason is not None:
+        packet["fallback_reason"] = reason
+    return packet
+
+
+def investigate(assessment: dict, *, user_id: str = "demo") -> dict:
+    """Return a validated, host-owned review packet.
+
+    Attempts the live ADK/Groq investigator first; its proposal is accepted only
+    if it passes host validation. On disabled/unavailable Groq, quota, timeout,
+    429, tool failure, or any malformed/invalid output, returns the deterministic
+    `template_fallback` (with a `fallback_reason`). The host owns the
+    authoritative text in every mode.
+    """
+    from . import investigator  # lazy: keeps ADK/LiteLLM off the deterministic path
+
+    if not investigator.is_enabled():
+        return _fallback(assessment, reason="groq_disabled_or_no_key")
+    try:
+        live = investigator.run_investigation(assessment, user_id=user_id)
+    except investigator.LiveUnavailable as e:
+        return _fallback(assessment, reason=e.reason)
+
+    selection = live["selection"]
+    return {
+        "generation_mode": "groq",
+        "selection": selection,
+        "authoritative_text": _SUMMARY_TEXT[selection["summary_template_code"]],
+        "trace": live["trace"],
+        "retries": live.get("retries", 0),
     }
