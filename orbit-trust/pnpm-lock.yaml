@@ -11,8 +11,8 @@ importers:
   apps/web:
     dependencies:
       '@engine/math':
-        specifier: file:../../../3d-game/packages/math
-        version: file:../3d-game/packages/math
+        specifier: link:../../../3d-game/packages/math
+        version: link:../../../3d-game/packages/math
       next:
         specifier: latest
         version: 16.3.4(@types/node@24.13.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
@@ -40,9 +40,6 @@ packages:
 
   '@emnapi/runtime@1.11.3':
     resolution: {integrity: sha512-Xz4Tpyki7XyrpbUK1jR1AhdAdaXyhhY4lZ3neLodmhpuWfy2PAQN5B46sAiU4liOXGLkHypn/qU+jvfWSCYYLA==}
-
-  '@engine/math@file:../3d-game/packages/math':
-    resolution: {directory: ../3d-game/packages/math, type: directory}
 
   '@img/colour@1.1.0':
     resolution: {integrity: sha512-Td76q7j57o/tLVdgS746cYARfSyxk8iEfRxewL9h4OMzYhbW4TAcppl0mT4eyqXddh6L/jwoM75mo7ixa/pCeQ==}
@@ -386,8 +383,6 @@ snapshots:
     dependencies:
       tslib: 2.8.1
     optional: true
-
-  '@engine/math@file:../3d-game/packages/math': {}
 
   '@img/colour@1.1.0':
     optional: true

@@ -8,7 +8,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@engine/math": "file:../../../3d-game/packages/math",
+    "@engine/math": "link:../../../3d-game/packages/math",
     "next": "latest",
     "react": "latest",
     "react-dom": "latest"

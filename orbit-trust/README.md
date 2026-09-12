@@ -18,6 +18,13 @@ Run `pnpm check` before a release. The static export is written to `apps/web/out
 
 ## Repository boundary
 
+`@engine/math` is linked directly to `../3d-game/packages/math` so engine additions
+such as `triangle.ts` are available immediately instead of depending on a copied
+package snapshot. Keep both folders in the checkout. After changing dependency
+links, run `pnpm install` from `orbit-trust/` and restart `pnpm dev`.
+Turbopack's root includes both folders, while `transpilePackages` compiles the
+shared TypeScript source.
+
 Build ORBIT-TRUST inside this `orbit-trust/` directory. The existing `3d-game/` application is an important future implementation asset. Preserve its source, assets, dependencies, configuration, history and deployment. Do not delete, overwrite, rename, move or repurpose it while implementing ORBIT-TRUST.
 
 If the connected Vercel project currently deploys `3d-game/`, preserve that deployment and establish the intended ORBIT-TRUST deployment target before changing project settings.
