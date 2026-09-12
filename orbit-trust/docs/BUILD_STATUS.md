@@ -51,11 +51,11 @@ No larger deviations found; implementation tracks the handoff.
 | --- | --- | --- |
 | M0 deployment path | PARTIAL | Skeleton + reference oracle + FastAPI health/capabilities run. Rust wheel spike DONE (abi3-py312 manylinux_2_34 wheel built, imported, validated). Supabase + Groq spikes BLOCKED (creds). Vercel import-in-function verification pending a project. |
 | N1 Rust production core | DONE | orbit_core: projection + GL/periodic-trapezoid polar quadrature with two-grid convergence gate + Rayon batch. Matches Python oracle across T01-T10; wheel + build-manifest in vendor/wheels/. Benchmark (2000 problems): seq-Python 3400ms, seq-Rust 3310ms, parallel-Rust 483ms (6.8x), cached 83ms. |
-| M1 contracts/storage | PARTIAL | Strict Pydantic contract; domain validation + import classification; report ledger dedup/conflict/pair (T16-T18); canonical digest. supabase/migrations 0001-0004 authored (UNAPPLIED - no creds): core+fleet/reentry tables, RLS, core RPCs, demo seed. Live auth/isolation + operation-lease RPC bodies BLOCKED. |
+| M1 contracts/storage | PARTIAL | Strict Pydantic contract; domain validation + import classification; report ledger dedup/conflict/pair (T16-T18); canonical digest. supabase/migrations 0001-0007 authored + APPLIED/seeded on the live project (reachable over the HTTPS Data API; direct Postgres is IPv6-only and unreachable from the build sandbox). In-memory service layer + doc-05 core-loop endpoints now built and tested (see below). Swapping the in-memory store for Supabase RPC calls + JWT auth is the remaining M1 work. |
 | M2 scientific core | DONE (logic) | Rust core + Python oracle T01-T10; covariance/precision states (T07-T09); P0-P3 policy + ack floor (T12/T14); assessment engine (findings, evidence-state precedence, material-concern vs review, reopening) T11/T13/T15. Persisted assessment table lands with N2. |
 | M3 fleet/comms | PARTIAL | Fleet comparison engine (T25-T26 hero reversal) + communication timing/state machine (T28), both wired as compute-only API endpoints. Bounded chunks / DB leases / resumable batches / benchmark modes BLOCKED (no DB). |
 | M4 consequence/reentry | PARTIAL | Decimal expected-loss economics (T29-T30) + reentry exposure with holes/boundary + conditional damage (T31-T33), wired as compute-only endpoints. Reentry cannot alter orbital policy (separate module). |
-| M5 agent | NOT_STARTED | |
+| M5 agent | PARTIAL | Bounded investigate FALLBACK built: deterministic host-owned AgentSelection (template selection over the assessment's own findings) + host validator (`agent.validate_selection`) that a Groq/ADK proposal must pass. Live Groq/ADK provider call + budgets/quotas BLOCKED on wiring (creds present in .env; provider integration deferred by owner). |
 | M6 console | NOT_STARTED | |
 | M7 release | NOT_STARTED | |
 
@@ -91,6 +91,26 @@ No larger deviations found; implementation tracks the handoff.
 | T13 (cosmetic vs material) | PASS | DEADLINE_UNKNOWN (non-material) no review; MANEUVER_CONTEXT_UNKNOWN (material) reviews |
 | T15 (reopen closed) | PASS | new material evidence -> reviewing + ack required; duplicate/cosmetic -> unchanged |
 | all others | NOT_RUN | later milestones (credential-gated) |
+
+## Backend service layer (this session)
+Built the doc-05 workspace core loop as a self-contained layer, behind seams so
+Supabase/Groq/Vercel wiring drops in without touching callers (owner deferred
+those integrations). New modules: `store.py` (in-memory, workspace-scoped,
+global lock — the only stateful component; the Supabase store replaces it),
+`service.py` (domain ops), `agent.py` (investigate fallback + host validator).
+Endpoints added: POST /workspaces/demo, POST /imports, GET /cases,
+GET /cases/{id}, GET /cases/{id}/reports, POST /cases/{id}/assess,
+POST /cases/{id}/actions, POST /cases/{id}/investigate,
+POST /workspaces/{id}/reset, GET /activity. Doc-05 error shape + demo identity
+(`X-Demo-User`/`X-Workspace-Id`, fail-closed) + Idempotency-Key.
+- Acceptance: `tests/reference/test_service.py` PASS — create/import/dedup,
+  workspace + case revision guards (409), queue sort + QUEUE_CHANGED cursor,
+  workflow state machine + invalid-transition 409, latest-version ack floor,
+  partial-batch import (bad record rejected, summary preserved), idempotent
+  replay, cross-identity isolation, investigate fallback validated.
+- Deferred (chosen scope, doc 13 cut order): satellites CRUD,
+  operations/continue DB leases + resumable batches, exports (json/markdown),
+  and the real Supabase RPC/JWT + live Groq + Vercel env wiring.
 
 ## Next executable ticket
 Full forward plan with per-phase gates and acceptance: see `docs/NEXT_PHASE.md`.

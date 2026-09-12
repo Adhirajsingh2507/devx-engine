@@ -12,7 +12,10 @@ alongside — never touching — the `3d-game/` app.
 ```
 app.py               FastAPI Vercel entrypoint (exports the instance)
 orbit_trust/         Python API, numerics, domain, persistence, policy, ADK
-  api.py             /api/v1/health, /api/v1/capabilities  (more per milestone)
+  api.py             FastAPI surface: liveness, compute cores, workspace core loop
+  service.py         workspace domain ops (import/queue/assess/actions/investigate)
+  store.py           in-memory workspace store (Supabase-backed store swaps in here)
+  agent.py           bounded investigate fallback (Groq/ADK slots behind investigate)
   numerics.py        independent Pc reference oracle (doc 06/12)
 crates/orbit_core/   Rust + PyO3 production math core (built via maturin)
 contracts/           canonical JSON Schema (+ generated OpenAPI snapshot later)

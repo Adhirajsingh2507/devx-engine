@@ -1,6 +1,5 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "//": "ORBIT-TRUST deployment (docs 04/14). This is a DISTINCT project from the game's `3d-game` Vercel project (prj_xEnl...). Root Directory = orbit-trust/. FastAPI Python function + static Next.js export in public/. Verify framework preset, route precedence (/api/v1/* vs fixed pages) and function duration (target 60s) in M0 against the real project before promoting. No blanket HTML fallback for /api failures.",
   "functions": {
     "app.py": { "maxDuration": 60 }
   }

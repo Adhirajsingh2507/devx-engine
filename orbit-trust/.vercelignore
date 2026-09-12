@@ -1,0 +1,18 @@
+# Keep the Vercel Python function bundle small: upload only what app.py imports
+# at runtime (app.py + orbit_trust/ + requirements.txt/pyproject). Everything
+# below is dev-only or installed server-side, and bloats the 225 MB function.
+.venv*/
+crates/
+vendor/
+data/
+tests/
+docs/
+contracts/
+supabase/
+deploy/
+.pytest_cache/
+__pycache__/
+*.pyc
+*.whl
+.env
+.env.*
